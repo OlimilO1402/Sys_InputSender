@@ -15,14 +15,14 @@ Option Explicit
 
 'https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-mouseinput
 Private Type MOUSEINPUT
-    dwType      As EInputType ' 4
-    dX          As Long       ' 4
-    dY          As Long       ' 4
-    MouseData   As Long       ' 4
-    dwFlags     As Long       ' 4
-    Time        As Long       ' 4
-    dwExtraInfo As LongPtr    ' 4/8
-End Type                ' Sum: 28
+    dwType      As EInputType      ' 4
+    dX          As Long            ' 4
+    dY          As Long            ' 4
+    MouseData   As Long            ' 4
+    dwFlags     As Long            ' 4
+    Time        As Long            ' 4
+    dwExtraInfo As LongPtr         ' 4/8
+End Type                     ' Sum: 28
 
 Private Type PMOUSEINPUT
     SAPtr As TUDTPtr
@@ -34,7 +34,7 @@ Private m_Data  As MOUSEINPUT
 
 Private Sub Class_Initialize()
     m_Data.dwType = EInputType.INPUT_MOUSE
-    MPtr.New_UDTPtr m_Value.SAPtr, FADF_AUTO Or FADF_FIXEDSIZE Or FADF_RECORD, 24
+    MPtr.New_UDTPtr m_Value.SAPtr, FADF_AUTO Or FADF_FIXEDSIZE Or FADF_RECORD, 28
     MPtr.SAPtr(ArrPtr(m_Value.Arr)) = m_Value.SAPtr.pSA
     m_Value.SAPtr.pvData = VarPtr(m_Data)
 End Sub
@@ -42,9 +42,7 @@ End Sub
 Private Sub Class_Terminate()
     MPtr.ZeroSAPtr ArrPtr(m_Value.Arr)
 End Sub
-'pData As LongPtr,
 Friend Sub New_(dX As Long, dY As Long, MouseData As Long, Flags As Long, aTime As Long)
-    If pData Then m_Value.SAPtr.pvData = pData
     With Me: .dX = dX: .dY = dY: .MouseData = MouseData: .Flags = Flags: .Time = aTime: End With
 End Sub
 'Copy to MNew:
@@ -58,6 +56,10 @@ End Sub
 Public Function Clone() As WndInputMouse
     Set Clone = New WndInputMouse: Clone.NewC Me
 End Function
+
+Public Property Get Key() As String
+    Key = "Mi: " & Me.dX & " " & Me.dY
+End Property
 
 Public Property Get Ptr() As LongPtr
     Ptr = m_Value.SAPtr.pvData
@@ -133,14 +135,15 @@ Public Property Let ExtraInfo(ByVal Value As LongPtr)
     m_Value.Arr(0).dwExtraInfo = Value
 End Property
 
-Friend Function ToStr() As String
+Public Function ToStr() As String
     Dim s As String: s = TypeName(Me) & "{" & vbCrLf
     With Me
-        s = s & "    dX       : " & .dX & vbCrLf
-        s = s & "    dY       : " & .dY & vbCrLf
-        s = s & "    Mousedata: " & .MouseData & vbCrLf
-        s = s & "    dwFlags  : " & .Flags & vbCrLf
-        s = s & "    time     : " & .Time & vbCrLf
+        s = s & "    dX          : " & .dX & vbCrLf
+        s = s & "    dY          : " & .dY & vbCrLf
+        s = s & "    MouseData   : " & .MouseData & vbCrLf
+        s = s & "    Flags       : " & MVirtualKeys.EMouseEventFlags_ToStr(.Flags) & vbCrLf
+        's = s & "    Flags       : " & .Flags & vbCrLf
+        s = s & "    Time        : " & .Time & vbCrLf
     End With
     ToStr = s & "}"
 End Function

@@ -26,7 +26,7 @@ Begin VB.Form FInputKeybd
       Height          =   1485
       Left            =   1680
       Style           =   1  'Kontrollkästchen
-      TabIndex        =   9
+      TabIndex        =   5
       Top             =   1080
       Width           =   3015
    End
@@ -34,7 +34,7 @@ Begin VB.Form FInputKeybd
       Alignment       =   2  'Zentriert
       Height          =   375
       Left            =   1680
-      TabIndex        =   8
+      TabIndex        =   7
       Top             =   2640
       Width           =   3015
    End
@@ -42,14 +42,14 @@ Begin VB.Form FInputKeybd
       Alignment       =   2  'Zentriert
       Height          =   375
       Left            =   1680
-      TabIndex        =   4
+      TabIndex        =   3
       Top             =   600
       Width           =   3015
    End
    Begin VB.ComboBox CmbKeyCodes 
       Height          =   375
       Left            =   1680
-      TabIndex        =   3
+      TabIndex        =   1
       Top             =   120
       Width           =   3015
    End
@@ -58,7 +58,7 @@ Begin VB.Form FInputKeybd
       Caption         =   "Cancel"
       Height          =   375
       Left            =   2520
-      TabIndex        =   1
+      TabIndex        =   9
       Top             =   3120
       Width           =   1335
    End
@@ -67,7 +67,7 @@ Begin VB.Form FInputKeybd
       Default         =   -1  'True
       Height          =   375
       Left            =   960
-      TabIndex        =   0
+      TabIndex        =   8
       Top             =   3120
       Width           =   1335
    End
@@ -76,7 +76,7 @@ Begin VB.Form FInputKeybd
       Caption         =   "Time (ms):"
       Height          =   255
       Left            =   120
-      TabIndex        =   7
+      TabIndex        =   6
       Top             =   2640
       Width           =   900
    End
@@ -85,7 +85,7 @@ Begin VB.Form FInputKeybd
       Caption         =   "Flags:"
       Height          =   255
       Left            =   120
-      TabIndex        =   6
+      TabIndex        =   4
       Top             =   1080
       Width           =   495
    End
@@ -94,7 +94,7 @@ Begin VB.Form FInputKeybd
       Caption         =   "Scan (Unicode):"
       Height          =   255
       Left            =   120
-      TabIndex        =   5
+      TabIndex        =   2
       Top             =   600
       Width           =   1350
    End
@@ -103,7 +103,7 @@ Begin VB.Form FInputKeybd
       Caption         =   "VKeyCode:"
       Height          =   255
       Left            =   120
-      TabIndex        =   2
+      TabIndex        =   0
       Top             =   120
       Width           =   945
    End
@@ -157,4 +157,11 @@ End Sub
 Private Sub BtnCancel_Click()
     m_Result = VbMsgBoxResult.vbCancel
     Unload Me
+End Sub
+
+Private Sub LstFlags_ItemCheck(Item As Integer)
+    Select Case Item
+    Case 0: LstFlags.Selected(2) = False
+    Case 2: LstFlags.Selected(0) = False
+    End Select
 End Sub

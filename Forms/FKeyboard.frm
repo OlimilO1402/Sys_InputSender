@@ -4,7 +4,7 @@ Begin VB.Form FKeyboard
    ClientHeight    =   4815
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   21015
+   ClientWidth     =   19695
    BeginProperty Font 
       Name            =   "Segoe UI"
       Size            =   9.75
@@ -16,45 +16,93 @@ Begin VB.Form FKeyboard
    EndProperty
    LinkTopic       =   "Form1"
    ScaleHeight     =   4815
-   ScaleWidth      =   21015
+   ScaleWidth      =   19695
    StartUpPosition =   3  'Windows-Standard
-   Begin VB.CommandButton BtnSend 
-      Caption         =   "Send"
+   Begin VB.CommandButton BtnSave 
+      Caption         =   "Save"
       Height          =   375
-      Left            =   15840
-      TabIndex        =   161
+      Left            =   18720
+      TabIndex        =   166
+      ToolTipText     =   "Save to file tmp\InputSender.bin"
       Top             =   120
-      Width           =   1215
+      Width           =   855
+   End
+   Begin VB.CommandButton BtnRead 
+      Caption         =   "Read"
+      Height          =   375
+      Left            =   17880
+      TabIndex        =   165
+      ToolTipText     =   "Read file tmp\InputSender.bin"
+      Top             =   120
+      Width           =   855
+   End
+   Begin VB.CommandButton BtnClear 
+      Caption         =   "Clear"
+      Height          =   375
+      Left            =   17040
+      TabIndex        =   164
+      ToolTipText     =   "Delete the list"
+      Top             =   120
+      Width           =   855
    End
    Begin VB.CommandButton BtnMoveDown 
       Caption         =   "v"
       Height          =   495
       Left            =   15360
-      TabIndex        =   157
-      Top             =   960
+      TabIndex        =   144
+      ToolTipText     =   "Move down"
+      Top             =   1920
       Width           =   495
    End
    Begin VB.CommandButton BtnMoveUp 
       Caption         =   "^"
       Height          =   495
       Left            =   15360
-      TabIndex        =   156
+      TabIndex        =   143
+      ToolTipText     =   "Move up"
+      Top             =   1440
+      Width           =   495
+   End
+   Begin VB.CommandButton BtnDelete 
+      Caption         =   "-"
+      Height          =   495
+      Left            =   15360
+      TabIndex        =   163
+      ToolTipText     =   "Clone the selected object"
+      Top             =   960
+      Width           =   495
+   End
+   Begin VB.CommandButton BtnClone 
+      Caption         =   "++"
+      Height          =   495
+      Left            =   15360
+      TabIndex        =   142
+      ToolTipText     =   "Clone the selected object"
       Top             =   480
       Width           =   495
    End
-   Begin VB.CommandButton Command2 
-      Caption         =   "+Hardware"
+   Begin VB.CommandButton BtnSend 
+      Caption         =   "Send"
       Height          =   375
-      Left            =   14640
-      TabIndex        =   158
+      Left            =   15840
+      TabIndex        =   145
+      ToolTipText     =   "Send all inputs"
       Top             =   120
       Width           =   1215
    End
-   Begin VB.CommandButton Command1 
+   Begin VB.CommandButton BtnNewInputHardw 
+      Caption         =   "+Hardware"
+      Height          =   375
+      Left            =   14640
+      TabIndex        =   140
+      Top             =   120
+      Width           =   1215
+   End
+   Begin VB.CommandButton BtnNewInputMouse 
       Caption         =   "+Mouse"
       Height          =   375
       Left            =   13440
-      TabIndex        =   159
+      TabIndex        =   139
       ToolTipText     =   "Add New Mouse-Input"
       Top             =   120
       Width           =   1215
@@ -63,7 +111,7 @@ Begin VB.Form FKeyboard
       Caption         =   "+Keyboard"
       Height          =   375
       Left            =   12240
-      TabIndex        =   160
+      TabIndex        =   138
       ToolTipText     =   "Add New Keyboard-Input"
       Top             =   120
       Width           =   1215
@@ -73,24 +121,34 @@ Begin VB.Form FKeyboard
       ItemData        =   "FKeyboard.frx":0000
       Left            =   12240
       List            =   "FKeyboard.frx":0002
-      TabIndex        =   155
+      TabIndex        =   141
+      ToolTipText     =   "Select to view; doubleclick to edit"
       Top             =   480
       Width           =   3135
    End
-   Begin VB.TextBox Text1 
+   Begin VB.TextBox TxtToStr 
+      BeginProperty Font 
+         Name            =   "Consolas"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   4335
       Left            =   15840
       MultiLine       =   -1  'True
       ScrollBars      =   3  'Beides
-      TabIndex        =   154
+      TabIndex        =   146
       Top             =   480
-      Width           =   5175
+      Width           =   3855
    End
    Begin VB.CommandButton BtnRec 
       Caption         =   "Record"
       Height          =   375
       Left            =   11040
-      TabIndex        =   153
+      TabIndex        =   137
       Top             =   120
       Width           =   1095
    End
@@ -98,7 +156,8 @@ Begin VB.Form FKeyboard
       Caption         =   "Select a Window"
       Height          =   375
       Left            =   120
-      TabIndex        =   151
+      TabIndex        =   0
+      ToolTipText     =   "Move mouse over desired window and press the Enter-key (do not click the mouse)"
       Top             =   120
       Width           =   1815
    End
@@ -110,7 +169,7 @@ Begin VB.Form FKeyboard
       Caption         =   "F13-F24"
       Height          =   255
       Left            =   4560
-      TabIndex        =   27
+      TabIndex        =   4
       Top             =   600
       Value           =   1  'Aktiviert
       Width           =   975
@@ -119,7 +178,7 @@ Begin VB.Form FKeyboard
       Caption         =   "Numpad"
       Height          =   255
       Left            =   7080
-      TabIndex        =   26
+      TabIndex        =   6
       Top             =   600
       Value           =   1  'Aktiviert
       Width           =   1095
@@ -128,7 +187,7 @@ Begin VB.Form FKeyboard
       Caption         =   "Cursor Keys"
       Height          =   255
       Left            =   5640
-      TabIndex        =   25
+      TabIndex        =   5
       Top             =   600
       Value           =   1  'Aktiviert
       Width           =   1455
@@ -137,14 +196,14 @@ Begin VB.Form FKeyboard
       Caption         =   "Special Keys"
       Height          =   1095
       Left            =   9120
-      TabIndex        =   20
+      TabIndex        =   23
       Top             =   960
       Width           =   3135
       Begin VB.CommandButton BtnPCSleep 
          Caption         =   "PC Sleep"
          Height          =   375
          Left            =   1560
-         TabIndex        =   22
+         TabIndex        =   27
          Top             =   600
          Width           =   1455
       End
@@ -152,7 +211,7 @@ Begin VB.Form FKeyboard
          Caption         =   "Start Email"
          Height          =   375
          Left            =   120
-         TabIndex        =   23
+         TabIndex        =   26
          Top             =   600
          Width           =   1455
       End
@@ -161,7 +220,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   181
          Left            =   1560
-         TabIndex        =   24
+         TabIndex        =   25
          Top             =   240
          Width           =   1455
       End
@@ -169,7 +228,7 @@ Begin VB.Form FKeyboard
          Caption         =   "Start Calc"
          Height          =   375
          Left            =   120
-         TabIndex        =   21
+         TabIndex        =   24
          Top             =   240
          Width           =   1455
       End
@@ -178,7 +237,7 @@ Begin VB.Form FKeyboard
       Caption         =   "Special Keys"
       Height          =   255
       Left            =   3120
-      TabIndex        =   19
+      TabIndex        =   3
       Top             =   600
       Value           =   1  'Aktiviert
       Width           =   1455
@@ -187,7 +246,7 @@ Begin VB.Form FKeyboard
       Caption         =   "Browser Keys"
       Height          =   255
       Left            =   1560
-      TabIndex        =   18
+      TabIndex        =   2
       Top             =   600
       Value           =   1  'Aktiviert
       Width           =   1575
@@ -196,7 +255,7 @@ Begin VB.Form FKeyboard
       Caption         =   "Media Keys"
       Height          =   255
       Left            =   120
-      TabIndex        =   17
+      TabIndex        =   1
       Top             =   600
       Value           =   1  'Aktiviert
       Width           =   1335
@@ -205,7 +264,7 @@ Begin VB.Form FKeyboard
       Caption         =   "Browser Keys"
       Height          =   1095
       Left            =   4560
-      TabIndex        =   9
+      TabIndex        =   15
       Top             =   960
       Width           =   4575
       Begin VB.CommandButton BtnKey 
@@ -213,7 +272,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   171
          Left            =   3000
-         TabIndex        =   16
+         TabIndex        =   22
          Top             =   600
          Width           =   1455
       End
@@ -222,7 +281,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   170
          Left            =   3000
-         TabIndex        =   15
+         TabIndex        =   19
          Top             =   240
          Width           =   1455
       End
@@ -231,7 +290,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   169
          Left            =   1560
-         TabIndex        =   14
+         TabIndex        =   21
          Top             =   600
          Width           =   1455
       End
@@ -240,7 +299,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   172
          Left            =   120
-         TabIndex        =   10
+         TabIndex        =   20
          Top             =   600
          Width           =   1455
       End
@@ -249,7 +308,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   167
          Left            =   2040
-         TabIndex        =   12
+         TabIndex        =   18
          Top             =   240
          Width           =   975
       End
@@ -258,7 +317,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   168
          Left            =   1080
-         TabIndex        =   13
+         TabIndex        =   17
          Top             =   240
          Width           =   975
       End
@@ -267,7 +326,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   166
          Left            =   120
-         TabIndex        =   11
+         TabIndex        =   16
          Top             =   240
          Width           =   975
       End
@@ -276,7 +335,7 @@ Begin VB.Form FKeyboard
       Caption         =   "Media Keys"
       Height          =   1095
       Left            =   0
-      TabIndex        =   1
+      TabIndex        =   7
       Top             =   960
       Width           =   4575
       Begin VB.CommandButton BtnKey 
@@ -284,7 +343,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   176
          Left            =   3000
-         TabIndex        =   8
+         TabIndex        =   14
          Top             =   600
          Width           =   1455
       End
@@ -293,7 +352,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   175
          Left            =   2040
-         TabIndex        =   2
+         TabIndex        =   13
          Top             =   600
          Width           =   975
       End
@@ -302,7 +361,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   173
          Left            =   1080
-         TabIndex        =   4
+         TabIndex        =   12
          Top             =   600
          Width           =   975
       End
@@ -311,7 +370,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   174
          Left            =   120
-         TabIndex        =   3
+         TabIndex        =   11
          Top             =   600
          Width           =   975
       End
@@ -320,7 +379,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   177
          Left            =   3000
-         TabIndex        =   7
+         TabIndex        =   10
          Top             =   240
          Width           =   1455
       End
@@ -329,7 +388,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   178
          Left            =   1560
-         TabIndex        =   6
+         TabIndex        =   9
          Top             =   240
          Width           =   1455
       End
@@ -338,7 +397,7 @@ Begin VB.Form FKeyboard
          Height          =   375
          Index           =   179
          Left            =   120
-         TabIndex        =   5
+         TabIndex        =   8
          Top             =   240
          Width           =   1455
       End
@@ -352,7 +411,7 @@ Begin VB.Form FKeyboard
       Left            =   0
       ScaleHeight     =   2655
       ScaleWidth      =   12255
-      TabIndex        =   0
+      TabIndex        =   28
       Top             =   2040
       Width           =   12255
       Begin VB.PictureBox PnlStandardKeys 
@@ -361,7 +420,7 @@ Begin VB.Form FKeyboard
          Left            =   120
          ScaleHeight     =   2295
          ScaleWidth      =   7335
-         TabIndex        =   63
+         TabIndex        =   29
          Top             =   360
          Width           =   7335
          Begin VB.CommandButton BtnKey 
@@ -369,7 +428,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   163
             Left            =   6360
-            TabIndex        =   64
+            TabIndex        =   131
             Top             =   1920
             Width           =   975
          End
@@ -378,7 +437,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   92
             Left            =   5400
-            TabIndex        =   65
+            TabIndex        =   130
             Top             =   1920
             Width           =   975
          End
@@ -387,7 +446,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   273
             Left            =   4800
-            TabIndex        =   66
+            TabIndex        =   129
             Top             =   1920
             Width           =   615
          End
@@ -396,7 +455,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   32
             Left            =   1920
-            TabIndex        =   67
+            TabIndex        =   128
             Top             =   1920
             Width           =   2895
          End
@@ -405,7 +464,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   18
             Left            =   1320
-            TabIndex        =   68
+            TabIndex        =   127
             Top             =   1920
             Width           =   615
          End
@@ -414,7 +473,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   91
             Left            =   720
-            TabIndex        =   69
+            TabIndex        =   126
             Top             =   1920
             Width           =   615
          End
@@ -423,7 +482,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   17
             Left            =   0
-            TabIndex        =   70
+            TabIndex        =   125
             Top             =   1920
             Width           =   735
          End
@@ -432,7 +491,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   272
             Left            =   5880
-            TabIndex        =   71
+            TabIndex        =   119
             Top             =   1560
             Width           =   1455
          End
@@ -441,7 +500,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   189
             Left            =   5400
-            TabIndex        =   72
+            TabIndex        =   118
             Top             =   1560
             Width           =   495
          End
@@ -450,7 +509,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   190
             Left            =   4920
-            TabIndex        =   73
+            TabIndex        =   117
             Top             =   1560
             Width           =   495
          End
@@ -459,7 +518,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   188
             Left            =   4440
-            TabIndex        =   74
+            TabIndex        =   116
             Top             =   1560
             Width           =   495
          End
@@ -468,7 +527,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   77
             Left            =   3960
-            TabIndex        =   75
+            TabIndex        =   115
             Top             =   1560
             Width           =   495
          End
@@ -477,7 +536,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   78
             Left            =   3480
-            TabIndex        =   76
+            TabIndex        =   114
             Top             =   1560
             Width           =   495
          End
@@ -486,7 +545,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   66
             Left            =   3000
-            TabIndex        =   77
+            TabIndex        =   113
             Top             =   1560
             Width           =   495
          End
@@ -495,7 +554,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   86
             Left            =   2520
-            TabIndex        =   78
+            TabIndex        =   112
             Top             =   1560
             Width           =   495
          End
@@ -504,7 +563,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   67
             Left            =   2040
-            TabIndex        =   79
+            TabIndex        =   111
             Top             =   1560
             Width           =   495
          End
@@ -513,7 +572,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   88
             Left            =   1560
-            TabIndex        =   80
+            TabIndex        =   110
             Top             =   1560
             Width           =   495
          End
@@ -522,7 +581,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   89
             Left            =   1080
-            TabIndex        =   81
+            TabIndex        =   109
             Top             =   1560
             Width           =   495
          End
@@ -531,7 +590,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   226
             Left            =   600
-            TabIndex        =   82
+            TabIndex        =   108
             Top             =   1560
             Width           =   495
          End
@@ -540,7 +599,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   16
             Left            =   0
-            TabIndex        =   83
+            TabIndex        =   107
             Top             =   1560
             Width           =   615
          End
@@ -549,7 +608,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   191
             Left            =   6120
-            TabIndex        =   84
+            TabIndex        =   103
             Top             =   1200
             Width           =   495
          End
@@ -558,7 +617,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   222
             Left            =   5640
-            TabIndex        =   85
+            TabIndex        =   102
             Top             =   1200
             Width           =   495
          End
@@ -567,7 +626,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   192
             Left            =   5160
-            TabIndex        =   86
+            TabIndex        =   101
             Top             =   1200
             Width           =   495
          End
@@ -576,7 +635,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   76
             Left            =   4680
-            TabIndex        =   87
+            TabIndex        =   100
             Top             =   1200
             Width           =   495
          End
@@ -585,7 +644,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   75
             Left            =   4200
-            TabIndex        =   88
+            TabIndex        =   99
             Top             =   1200
             Width           =   495
          End
@@ -594,7 +653,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   74
             Left            =   3720
-            TabIndex        =   89
+            TabIndex        =   98
             Top             =   1200
             Width           =   495
          End
@@ -603,7 +662,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   72
             Left            =   3240
-            TabIndex        =   90
+            TabIndex        =   97
             Top             =   1200
             Width           =   495
          End
@@ -612,7 +671,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   71
             Left            =   2760
-            TabIndex        =   91
+            TabIndex        =   96
             Top             =   1200
             Width           =   495
          End
@@ -621,7 +680,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   70
             Left            =   2280
-            TabIndex        =   92
+            TabIndex        =   95
             Top             =   1200
             Width           =   495
          End
@@ -630,7 +689,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   68
             Left            =   1800
-            TabIndex        =   93
+            TabIndex        =   94
             Top             =   1200
             Width           =   495
          End
@@ -639,7 +698,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   83
             Left            =   1320
-            TabIndex        =   94
+            TabIndex        =   93
             Top             =   1200
             Width           =   495
          End
@@ -648,7 +707,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   65
             Left            =   840
-            TabIndex        =   95
+            TabIndex        =   92
             Top             =   1200
             Width           =   495
          End
@@ -657,7 +716,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   20
             Left            =   0
-            TabIndex        =   96
+            TabIndex        =   91
             Top             =   1200
             Width           =   855
          End
@@ -666,7 +725,7 @@ Begin VB.Form FKeyboard
             Height          =   735
             Index           =   13
             Left            =   6480
-            TabIndex        =   97
+            TabIndex        =   83
             Top             =   840
             Width           =   855
          End
@@ -675,7 +734,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   187
             Left            =   6000
-            TabIndex        =   98
+            TabIndex        =   82
             Top             =   840
             Width           =   495
          End
@@ -684,7 +743,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   186
             Left            =   5520
-            TabIndex        =   99
+            TabIndex        =   81
             Top             =   840
             Width           =   495
          End
@@ -693,7 +752,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   80
             Left            =   5040
-            TabIndex        =   100
+            TabIndex        =   80
             Top             =   840
             Width           =   495
          End
@@ -702,7 +761,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   79
             Left            =   4560
-            TabIndex        =   101
+            TabIndex        =   79
             Top             =   840
             Width           =   495
          End
@@ -711,7 +770,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   73
             Left            =   4080
-            TabIndex        =   102
+            TabIndex        =   78
             Top             =   840
             Width           =   495
          End
@@ -720,7 +779,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   85
             Left            =   3600
-            TabIndex        =   103
+            TabIndex        =   77
             Top             =   840
             Width           =   495
          End
@@ -729,7 +788,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   90
             Left            =   3120
-            TabIndex        =   104
+            TabIndex        =   76
             Top             =   840
             Width           =   495
          End
@@ -738,7 +797,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   84
             Left            =   2640
-            TabIndex        =   105
+            TabIndex        =   75
             Top             =   840
             Width           =   495
          End
@@ -747,7 +806,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   82
             Left            =   2160
-            TabIndex        =   106
+            TabIndex        =   74
             Top             =   840
             Width           =   495
          End
@@ -756,7 +815,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   69
             Left            =   1680
-            TabIndex        =   107
+            TabIndex        =   73
             Top             =   840
             Width           =   495
          End
@@ -765,7 +824,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   87
             Left            =   1200
-            TabIndex        =   108
+            TabIndex        =   72
             Top             =   840
             Width           =   495
          End
@@ -774,7 +833,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   81
             Left            =   720
-            TabIndex        =   109
+            TabIndex        =   71
             Top             =   840
             Width           =   495
          End
@@ -783,7 +842,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   9
             Left            =   0
-            TabIndex        =   110
+            TabIndex        =   70
             Top             =   840
             Width           =   735
          End
@@ -792,7 +851,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   8
             Left            =   6240
-            TabIndex        =   111
+            TabIndex        =   62
             Top             =   480
             Width           =   1095
          End
@@ -801,7 +860,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   221
             Left            =   5760
-            TabIndex        =   112
+            TabIndex        =   61
             Top             =   480
             Width           =   495
          End
@@ -810,7 +869,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   219
             Left            =   5280
-            TabIndex        =   113
+            TabIndex        =   60
             Top             =   480
             Width           =   495
          End
@@ -819,7 +878,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   48
             Left            =   4800
-            TabIndex        =   114
+            TabIndex        =   59
             Top             =   480
             Width           =   495
          End
@@ -828,7 +887,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   57
             Left            =   4320
-            TabIndex        =   115
+            TabIndex        =   58
             Top             =   480
             Width           =   495
          End
@@ -837,7 +896,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   56
             Left            =   3840
-            TabIndex        =   116
+            TabIndex        =   57
             Top             =   480
             Width           =   495
          End
@@ -846,7 +905,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   55
             Left            =   3360
-            TabIndex        =   117
+            TabIndex        =   56
             Top             =   480
             Width           =   495
          End
@@ -855,7 +914,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   54
             Left            =   2880
-            TabIndex        =   118
+            TabIndex        =   55
             Top             =   480
             Width           =   495
          End
@@ -864,7 +923,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   53
             Left            =   2400
-            TabIndex        =   119
+            TabIndex        =   54
             Top             =   480
             Width           =   495
          End
@@ -873,7 +932,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   52
             Left            =   1920
-            TabIndex        =   120
+            TabIndex        =   53
             Top             =   480
             Width           =   495
          End
@@ -882,7 +941,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   51
             Left            =   1440
-            TabIndex        =   121
+            TabIndex        =   52
             Top             =   480
             Width           =   495
          End
@@ -891,7 +950,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   50
             Left            =   960
-            TabIndex        =   122
+            TabIndex        =   51
             Top             =   480
             Width           =   495
          End
@@ -900,7 +959,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   49
             Left            =   480
-            TabIndex        =   123
+            TabIndex        =   50
             Top             =   480
             Width           =   495
          End
@@ -909,7 +968,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   220
             Left            =   0
-            TabIndex        =   124
+            TabIndex        =   49
             Top             =   480
             Width           =   495
          End
@@ -918,7 +977,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   123
             Left            =   6840
-            TabIndex        =   125
+            TabIndex        =   42
             Top             =   0
             Width           =   495
          End
@@ -927,7 +986,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   122
             Left            =   6360
-            TabIndex        =   126
+            TabIndex        =   41
             Top             =   0
             Width           =   495
          End
@@ -936,7 +995,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   121
             Left            =   5880
-            TabIndex        =   127
+            TabIndex        =   40
             Top             =   0
             Width           =   495
          End
@@ -945,7 +1004,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   120
             Left            =   5400
-            TabIndex        =   128
+            TabIndex        =   39
             Top             =   0
             Width           =   495
          End
@@ -954,7 +1013,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   119
             Left            =   4560
-            TabIndex        =   129
+            TabIndex        =   38
             Top             =   0
             Width           =   495
          End
@@ -963,7 +1022,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   118
             Left            =   4080
-            TabIndex        =   130
+            TabIndex        =   37
             Top             =   0
             Width           =   495
          End
@@ -972,7 +1031,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   117
             Left            =   3600
-            TabIndex        =   131
+            TabIndex        =   36
             Top             =   0
             Width           =   495
          End
@@ -981,7 +1040,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   116
             Left            =   3120
-            TabIndex        =   132
+            TabIndex        =   35
             Top             =   0
             Width           =   495
          End
@@ -990,7 +1049,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   115
             Left            =   2280
-            TabIndex        =   133
+            TabIndex        =   34
             Top             =   0
             Width           =   495
          End
@@ -999,7 +1058,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   114
             Left            =   1800
-            TabIndex        =   134
+            TabIndex        =   33
             Top             =   0
             Width           =   495
          End
@@ -1008,7 +1067,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   113
             Left            =   1320
-            TabIndex        =   135
+            TabIndex        =   32
             Top             =   0
             Width           =   495
          End
@@ -1017,7 +1076,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   112
             Left            =   840
-            TabIndex        =   136
+            TabIndex        =   31
             Top             =   0
             Width           =   495
          End
@@ -1026,7 +1085,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   27
             Left            =   0
-            TabIndex        =   137
+            TabIndex        =   30
             Top             =   0
             Width           =   495
          End
@@ -1037,7 +1096,7 @@ Begin VB.Form FKeyboard
          Left            =   120
          ScaleHeight     =   375
          ScaleWidth      =   7335
-         TabIndex        =   138
+         TabIndex        =   149
          Top             =   0
          Width           =   7335
          Begin VB.CommandButton BtnKey 
@@ -1045,7 +1104,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   135
             Left            =   6840
-            TabIndex        =   139
+            TabIndex        =   150
             Top             =   0
             Width           =   495
          End
@@ -1054,7 +1113,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   134
             Left            =   6360
-            TabIndex        =   140
+            TabIndex        =   151
             Top             =   0
             Width           =   495
          End
@@ -1063,7 +1122,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   133
             Left            =   5880
-            TabIndex        =   141
+            TabIndex        =   152
             Top             =   0
             Width           =   495
          End
@@ -1072,7 +1131,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   132
             Left            =   5400
-            TabIndex        =   142
+            TabIndex        =   153
             Top             =   0
             Width           =   495
          End
@@ -1081,7 +1140,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   131
             Left            =   4560
-            TabIndex        =   143
+            TabIndex        =   154
             Top             =   0
             Width           =   495
          End
@@ -1090,7 +1149,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   130
             Left            =   4080
-            TabIndex        =   144
+            TabIndex        =   155
             Top             =   0
             Width           =   495
          End
@@ -1099,7 +1158,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   129
             Left            =   3600
-            TabIndex        =   145
+            TabIndex        =   156
             Top             =   0
             Width           =   495
          End
@@ -1108,7 +1167,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   128
             Left            =   3120
-            TabIndex        =   146
+            TabIndex        =   157
             Top             =   0
             Width           =   495
          End
@@ -1117,7 +1176,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   127
             Left            =   2280
-            TabIndex        =   147
+            TabIndex        =   158
             Top             =   0
             Width           =   495
          End
@@ -1126,7 +1185,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   126
             Left            =   1800
-            TabIndex        =   148
+            TabIndex        =   159
             Top             =   0
             Width           =   495
          End
@@ -1135,7 +1194,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   125
             Left            =   1320
-            TabIndex        =   149
+            TabIndex        =   160
             Top             =   0
             Width           =   495
          End
@@ -1144,7 +1203,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   124
             Left            =   840
-            TabIndex        =   150
+            TabIndex        =   161
             Top             =   0
             Width           =   495
          End
@@ -1155,7 +1214,7 @@ Begin VB.Form FKeyboard
          Left            =   7680
          ScaleHeight     =   2295
          ScaleWidth      =   1815
-         TabIndex        =   49
+         TabIndex        =   148
          Top             =   360
          Width           =   1815
          Begin VB.CommandButton BtnKey 
@@ -1163,7 +1222,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   39
             Left            =   1200
-            TabIndex        =   50
+            TabIndex        =   134
             Top             =   1920
             Width           =   615
          End
@@ -1172,7 +1231,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   40
             Left            =   600
-            TabIndex        =   51
+            TabIndex        =   133
             Top             =   1920
             Width           =   615
          End
@@ -1181,7 +1240,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   37
             Left            =   0
-            TabIndex        =   52
+            TabIndex        =   132
             Top             =   1920
             Width           =   615
          End
@@ -1190,7 +1249,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   38
             Left            =   600
-            TabIndex        =   53
+            TabIndex        =   120
             Top             =   1560
             Width           =   615
          End
@@ -1199,7 +1258,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   34
             Left            =   1200
-            TabIndex        =   54
+            TabIndex        =   86
             Top             =   840
             Width           =   615
          End
@@ -1208,7 +1267,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   35
             Left            =   600
-            TabIndex        =   55
+            TabIndex        =   85
             Top             =   840
             Width           =   615
          End
@@ -1217,7 +1276,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   46
             Left            =   0
-            TabIndex        =   56
+            TabIndex        =   84
             Top             =   840
             Width           =   615
          End
@@ -1226,7 +1285,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   33
             Left            =   1200
-            TabIndex        =   57
+            TabIndex        =   65
             Top             =   480
             Width           =   615
          End
@@ -1235,7 +1294,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   36
             Left            =   600
-            TabIndex        =   58
+            TabIndex        =   64
             Top             =   480
             Width           =   615
          End
@@ -1244,7 +1303,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   45
             Left            =   0
-            TabIndex        =   59
+            TabIndex        =   63
             Top             =   480
             Width           =   615
          End
@@ -1253,7 +1312,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   19
             Left            =   1200
-            TabIndex        =   60
+            TabIndex        =   45
             Top             =   0
             Width           =   615
          End
@@ -1262,7 +1321,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   145
             Left            =   600
-            TabIndex        =   61
+            TabIndex        =   44
             Top             =   0
             Width           =   615
          End
@@ -1280,7 +1339,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   42
             Left            =   0
-            TabIndex        =   62
+            TabIndex        =   43
             Top             =   0
             Width           =   615
          End
@@ -1291,7 +1350,7 @@ Begin VB.Form FKeyboard
          Left            =   9720
          ScaleHeight     =   2295
          ScaleWidth      =   2415
-         TabIndex        =   28
+         TabIndex        =   147
          Top             =   360
          Width           =   2415
          Begin VB.CommandButton BtnKey 
@@ -1299,7 +1358,7 @@ Begin VB.Form FKeyboard
             Height          =   735
             Index           =   43
             Left            =   1800
-            TabIndex        =   29
+            TabIndex        =   124
             Top             =   1560
             Width           =   615
          End
@@ -1308,7 +1367,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   110
             Left            =   1200
-            TabIndex        =   31
+            TabIndex        =   136
             Top             =   1920
             Width           =   615
          End
@@ -1317,7 +1376,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   96
             Left            =   0
-            TabIndex        =   32
+            TabIndex        =   135
             Top             =   1920
             Width           =   1215
          End
@@ -1326,7 +1385,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   99
             Left            =   1200
-            TabIndex        =   33
+            TabIndex        =   123
             Top             =   1560
             Width           =   615
          End
@@ -1335,7 +1394,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   98
             Left            =   600
-            TabIndex        =   34
+            TabIndex        =   122
             Top             =   1560
             Width           =   615
          End
@@ -1344,7 +1403,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   97
             Left            =   0
-            TabIndex        =   35
+            TabIndex        =   121
             Top             =   1560
             Width           =   615
          End
@@ -1353,7 +1412,7 @@ Begin VB.Form FKeyboard
             Height          =   735
             Index           =   107
             Left            =   1800
-            TabIndex        =   30
+            TabIndex        =   90
             Top             =   840
             Width           =   615
          End
@@ -1362,7 +1421,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   102
             Left            =   1200
-            TabIndex        =   36
+            TabIndex        =   106
             Top             =   1200
             Width           =   615
          End
@@ -1371,7 +1430,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   101
             Left            =   600
-            TabIndex        =   37
+            TabIndex        =   105
             Top             =   1200
             Width           =   615
          End
@@ -1380,7 +1439,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   100
             Left            =   0
-            TabIndex        =   38
+            TabIndex        =   104
             Top             =   1200
             Width           =   615
          End
@@ -1389,7 +1448,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   105
             Left            =   1200
-            TabIndex        =   39
+            TabIndex        =   89
             Top             =   840
             Width           =   615
          End
@@ -1398,7 +1457,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   104
             Left            =   600
-            TabIndex        =   40
+            TabIndex        =   88
             Top             =   840
             Width           =   615
          End
@@ -1407,7 +1466,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   103
             Left            =   0
-            TabIndex        =   41
+            TabIndex        =   87
             Top             =   840
             Width           =   615
          End
@@ -1416,7 +1475,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   109
             Left            =   1800
-            TabIndex        =   42
+            TabIndex        =   69
             Top             =   480
             Width           =   615
          End
@@ -1425,7 +1484,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   106
             Left            =   1200
-            TabIndex        =   43
+            TabIndex        =   68
             Top             =   480
             Width           =   615
          End
@@ -1434,7 +1493,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   111
             Left            =   600
-            TabIndex        =   44
+            TabIndex        =   67
             Top             =   480
             Width           =   615
          End
@@ -1443,7 +1502,7 @@ Begin VB.Form FKeyboard
             Height          =   375
             Index           =   144
             Left            =   0
-            TabIndex        =   45
+            TabIndex        =   66
             Top             =   480
             Width           =   615
          End
@@ -1451,7 +1510,7 @@ Begin VB.Form FKeyboard
             Caption         =   "Roll"
             Height          =   375
             Left            =   1680
-            TabIndex        =   46
+            TabIndex        =   48
             Tag             =   "145"
             Top             =   0
             Width           =   735
@@ -1478,7 +1537,7 @@ Begin VB.Form FKeyboard
             Caption         =   "Num"
             Height          =   375
             Left            =   0
-            TabIndex        =   48
+            TabIndex        =   46
             Tag             =   "144"
             Top             =   0
             Width           =   735
@@ -1490,7 +1549,7 @@ Begin VB.Form FKeyboard
       Caption         =   "(Window Title)"
       Height          =   255
       Left            =   2040
-      TabIndex        =   152
+      TabIndex        =   162
       Top             =   120
       Width           =   1245
    End
@@ -1509,28 +1568,108 @@ Private m_AtOnce  As Boolean 'right-mouse-click started, list in queue until lef
 Private Declare Function GetDesktopWindow Lib "user32.dll" () As LongPtr
 
 Private Sub Form_Load()
+    Me.Caption = "InputSender Keyboard, Mouse, Hardware: v" & App.Major & "." & App.Minor & "." & App.Revision
     Set m_WInputs = MNew.WndInputs(Me.hwnd, GetDesktopWindow)
     Set MWndPicker = New WndPicker: MWndPicker.New_ Timer1, BtnWndPicker
-    'set m_InQueue = mnew.
+    SetBtnKeyTooltip
 End Sub
 
-Private Sub BtnNewInputKeybd_Click()
-    Dim ki As WndInputKeybd: Set ki = New WndInputKeybd
-    If FInputKeybd.ShowDialog(ki) = vbCancel Then Exit Sub
-    m_WInputs.Add ki
-    Me.LstWndInputs.AddItem ki.Key
-    'UpdateView
+Sub SetBtnKeyTooltip()
+    Dim i As Long
+    Dim btn As CommandButton
+    For i = BtnKey.LBound To BtnKey.UBound ' BtnKey.Count ' - 1
+        Set btn = BtnKey.Item(i)
+        On Error Resume Next
+        btn.ToolTipText = "VKey: " & i
+    Next
+    ' Right-Shift is the same VkCode as Left-Shift = 16 , but we can not have twice the same Index
+    ' for a CommandButton so I decided to give the button for Right-Shift the index 256 + 16 = 272
+    BtnKey(272).ToolTipText = "VKey: " & EVirtualKeyCodes.VK_SHIFT
+    
+    ' The key AltGr is actually two VkCodes: 17 + 18, so I decided
+    ' to give the CommandButton for AltGr the Index 256 + 17 = 273
+    BtnKey(273).ToolTipText = "VKey: " & EVirtualKeyCodes.VK_CONTROL & " " & EVirtualKeyCodes.VK_MENU
+End Sub
+
+Private Sub BtnClear_Click()
+    m_WInputs.Clear
+    UpdateView
+End Sub
+
+Private Sub BtnRead_Click()
+    ReadFile
+    UpdateView
+End Sub
+Private Sub BtnSave_Click()
+    SaveFile
+End Sub
+
+Sub ReadFile()
+    Dim PFN As String: PFN = MApp.DefaultTmpPFN
+    If Not FileExists(PFN) Then MsgBox "File not found!" & vbCrLf & PFN: Exit Sub
+    If MsgBox("File found, do you want to read it?" & vbCrLf & PFN, vbOKCancel) = vbCancel Then Exit Sub
+    m_WInputs.Read PFN
+End Sub
+Sub SaveFile()
+    If m_WInputs.Count = 0 Then MsgBox "List is empty, nothing to save!": Exit Sub
+    Dim PFN As String: PFN = MApp.DefaultTmpPFN
+    Select Case MsgBox("Do you want to save to the file?" & vbCrLf & PFN, vbOKCancel) ' vbYesNoCancel)
+    Case vbCancel: 'Cancel = True: Exit Sub
+    'Case vbNo:     Cancel = False: Exit Sub
+    'Case vbYes:
+    Case vbOK:
+        If FileExists(PFN) Then Kill PFN
+        m_WInputs.Save PFN
+    End Select
+End Sub
+
+Private Sub BtnNewInputKeybd_Click():    NewInput FInputKeybd, New WndInputKeybd: End Sub
+Private Sub BtnNewInputMouse_Click():    NewInput FInputMouse, New WndInputMouse: End Sub
+Private Sub BtnNewInputHardw_Click():    NewInput FInputHardw, New WndInputHardw: End Sub
+Private Sub NewInput(FInput, WndInput As Object)
+    If FInput.ShowDialog(WndInput) = vbCancel Then Exit Sub
+    m_WInputs.Add WndInput
+    Me.LstWndInputs.AddItem WndInput.Key
+End Sub
+Private Sub BtnClone_Click()
+    If LstWndInputs.ListCount = 0 Then Exit Sub
+    Dim i As Long: i = LstWndInputs.ListIndex
+    If i < 0 Then i = LstWndInputs.ListCount - 1 'MsgBox "Select an object first!": Exit Sub
+    Dim ii: Set ii = m_WInputs.Item(i)
+    m_WInputs.Add ii.Clone
+    Me.LstWndInputs.AddItem ii.Key
+End Sub
+Private Sub BtnDelete_Click()
+    If LstWndInputs.ListCount = 0 Then Exit Sub
+    Dim i As Long: i = LstWndInputs.ListIndex
+    If i < 0 Then MsgBox "Please select an object first!": Exit Sub
+    m_WInputs.Remove i
+    UpdateView
+End Sub
+Private Sub BtnMoveUp_Click()
+    Dim i As Long: i = LstWndInputs.ListIndex
+    If i < 0 Then MsgBox "Select an object first!": Exit Sub
+    If i = 0 Then MsgBox "Can not go further up": Exit Sub
+    m_WInputs.SwapItems i, i - 1
+    UpdateView
+    LstWndInputs.ListIndex = i - 1
+End Sub
+Private Sub BtnMoveDown_Click()
+    Dim i As Long: i = LstWndInputs.ListIndex
+    If i < 0 Then MsgBox "Select an object first!": Exit Sub
+    If i = LstWndInputs.ListCount - 1 Then MsgBox "Can not go further down": Exit Sub
+    m_WInputs.SwapItems i, i + 1
+    UpdateView
+    LstWndInputs.ListIndex = i + 1
+End Sub
+Private Sub BtnSend_Click()
+    m_WInputs.Send
 End Sub
 
 Public Sub UpdateView()
     Dim i As Long: i = LstWndInputs.ListIndex
     m_WInputs.ToListBox Me.LstWndInputs
     LstWndInputs.ListIndex = i
-End Sub
-
-Private Sub BtnSend_Click()
-    'Debug.Print m_WInputs.Count
-    m_WInputs.Send
 End Sub
 
 Private Sub ChkShowBrowserKeys_Click():    Form_Resize: End Sub
@@ -1544,7 +1683,7 @@ Private Sub LstWndInputs_Click()
     Dim i As Long: i = LstWndInputs.ListIndex
     If i < 0 Then Exit Sub
     Dim Obj: Set Obj = m_WInputs.Item(i)
-    Text1.Text = Obj.ToStr
+    TxtToStr.Text = Obj.ToStr
 End Sub
 Private Sub LstWndInputs_DblClick()
     Dim i As Long: i = LstWndInputs.ListIndex
@@ -1554,12 +1693,9 @@ Private Sub LstWndInputs_DblClick()
 End Sub
 
 Private Sub mWndPicker_Found(ByVal aHWnd As LongPtr, ByVal WndCaption As String)
-    Set m_WInputs = MNew.WndInputs(Me.hwnd, aHWnd)
+    'Set m_WInputs = MNew.WndInputs(Me.hwnd, aHWnd)
+    m_WInputs.New_ Me.hwnd, aHWnd
     LblWndTitle.Caption = aHWnd & " " & WndCaption
-End Sub
-
-Private Sub BtnBrowserHome_Click()
-    
 End Sub
 
 Private Sub BtnKey_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
@@ -1579,16 +1715,15 @@ Private Sub BtnKey_Click(Index As Integer)
     Case EVirtualKeyCodes.VK_SCROLL:   CkRoll.Value = IIf(CkRoll.Value = vbChecked, vbUnchecked, vbChecked)  'just toggle
     
     Case 272:         VKey0 = EVirtualKeyCodes.VK_SHIFT
-                     ' Right-Shift is the same VkCode as Left-Shift = 16
-                     ' but we can not havie twice the same Index for a CommandButton
-                     ' so Right-Shift has got 256 + 16 = 272
+                    ' Right-Shift is the same VkCode as Left-Shift = 16 , but we can not have twice the same Index
+                    ' for a CommandButton so I decided to give the button for Right-Shift the index 256 + 16 = 272
     
     Case 273:         VKey0 = EVirtualKeyCodes.VK_CONTROL
                       VKey1 = EVirtualKeyCodes.VK_MENU
-                     'the key AltGR is actually two VKey-Codes: 17+18
-                     'so the CommandButton for AltGr has got Index = 256 + 17 = 273
+                    ' The key AltGr is actually two VkCodes: 17 + 18, so I decided
+                    ' to give the CommandButton for AltGr the Index 256 + 17 = 273
     End Select
-    'We also need a solution for Num-Lock
+    'maybe we also need a solution for Num-Lock
     If CkNum.Value = vbUnchecked Then
         Select Case VKey0
         Case EVirtualKeyCodes.VK_NUMPAD0: VKey0 = EVirtualKeyCodes.VK_INSERT
@@ -1604,15 +1739,8 @@ Private Sub BtnKey_Click(Index As Integer)
         Case EVirtualKeyCodes.VK_DECIMAL: VKey0 = EVirtualKeyCodes.VK_DELETE
         End Select
     End If
-    'do we need a solution for Shift-Lock? no
-    'If CkShift.Value = vbChecked Then
-    '    Select Case VKey0
-    '
-    '    End Select
-    'End If
     
     If m_WInputs Is Nothing Then
-    '    MsgBox "Select a window first"
         Exit Sub
     End If
     m_WInputs.Clear
@@ -1622,22 +1750,18 @@ Private Sub BtnKey_Click(Index As Integer)
         m_WInputs.AddInputKeybd MNew.WndInputKeybd(VKey1, 0, KEYEVENTF_KEYUP, 0)
     End If
     m_WInputs.Send
-    'MKeyBoard.SendKeyGlobal m_hWnd, Index
 End Sub
 
 Private Sub PnlKeyboard_KeyDown(KeyCode As Integer, Shift As Integer)
-    'BtnKey_Click KeyCode
     BtnKey(KeyCode).Value = True
 End Sub
 
-Private Sub Text1_KeyDown(KeyCode As Integer, Shift As Integer)
-    Debug.Print "KeyDown KeyCode: " & KeyCode & "; Shift: " & Shift
-End Sub
-
-Private Sub Text1_KeyUp(KeyCode As Integer, Shift As Integer)
-    Debug.Print "KeyUp   KeyCode: " & KeyCode & "; Shift: " & Shift
-End Sub
-
+'Private Sub Text1_KeyDown(KeyCode As Integer, Shift As Integer)
+'    Debug.Print "KeyDown KeyCode: " & KeyCode & "; Shift: " & Shift
+'End Sub
+'Private Sub Text1_KeyUp(KeyCode As Integer, Shift As Integer)
+'    Debug.Print "KeyUp   KeyCode: " & KeyCode & "; Shift: " & Shift
+'End Sub
 
 Private Sub Form_Resize()
     Dim L As Single, T As Single, W As Single, H As Single
@@ -1698,3 +1822,5 @@ Private Sub Form_Resize()
         If W > 0 And H > 0 Then PnlNumpad.Move L, T, W, H
     End If
 End Sub
+
+

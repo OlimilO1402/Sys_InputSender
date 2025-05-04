@@ -15,11 +15,11 @@ Option Explicit
 
 'https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-hardwareinput
 Private Type HARDWINPUT
-    dwType      As EInputType ' 4
-    uMsg        As Long       ' 4
-    WParamL     As Integer    ' 2
-    WParamH     As Integer    ' 2
-End Type                ' Sum: 12
+    dwType      As EInputType      ' 4
+    uMsg        As Long            ' 4
+    WParamL     As Integer         ' 2
+    WParamH     As Integer         ' 2
+End Type                     ' Sum: 12
 
 
 
@@ -34,7 +34,7 @@ Private m_Data  As HARDWINPUT
 
 Private Sub Class_Initialize()
     m_Data.dwType = EInputType.INPUT_HARDWARE
-    MPtr.New_UDTPtr m_Value.SAPtr, FADF_AUTO Or FADF_FIXEDSIZE Or FADF_RECORD, 8
+    MPtr.New_UDTPtr m_Value.SAPtr, FADF_AUTO Or FADF_FIXEDSIZE Or FADF_RECORD, 12
     MPtr.SAPtr(ArrPtr(m_Value.Arr)) = m_Value.SAPtr.pSA
     m_Value.SAPtr.pvData = VarPtr(m_Data)
 End Sub
@@ -43,19 +43,18 @@ Private Sub Class_Terminate()
     MPtr.ZeroSAPtr ArrPtr(m_Value.Arr)
 End Sub
 Friend Sub New_(aMessage As Long, WParamL As Integer, WParamH As Integer)
-    'If pData Then m_Value.SAPtr.pvData = pData
     With Me: .Message = aMessage: .WParamL = WParamL: .WParamH = WParamH: End With
 End Sub
 'Copy to MNew:
-'Public Function WndInputKeybd(ByVal pData As LongPtr, ByVal aMessage As Long, ByVal WParamL As Integer, ByVal WParamH As Integer) As WndInputKeybd
-'    Set WndInputKeybd = New WndInputKeybd: WndInputKeybd.New_ pData, aMessage, ByVal WParamL, ByVal WParamH
+'Public Function WndInputHardw(ByVal aMessage As Long, ByVal WParamL As Integer, ByVal WParamH As Integer) As WndInputHardw
+'    Set WndInputHardw = New WndInputHardw: WndInputHardw.New_ aMessage, WParamL, WParamH
 'End Function
 
-Friend Sub NewC(other As WndInputKeybd)
+Friend Sub NewC(other As WndInputHardw)
     With other: New_ .Message, .WParamL, .WParamH: End With
 End Sub
-Public Function Clone() As WndInputKeybd
-    Set Clone = New WndInputKeybd: Clone.NewC Me
+Public Function Clone() As WndInputHardw
+    Set Clone = New WndInputHardw: Clone.NewC Me
 End Function
 
 Public Property Get Key() As String
@@ -101,10 +100,14 @@ Public Function ToStr() As String
     Dim s As String
     s = TypeName(Me) & "{" & vbCrLf
     With Me
-        s = s & "    Message = " & .Message
-        s = s & "    WParamL = " & .WParamL
-        s = s & "    WParamH = " & .WParamH
+        s = s & "    Message     : " & .Message & vbCrLf
+        s = s & "    WParamL     : " & .WParamL & vbCrLf
+        s = s & "    WParamH     : " & .WParamH & vbCrLf
     End With
     ToStr = s & "}"
 End Function
+
+Public Sub Edit()
+    MApp.EditInputHardw Me
+End Sub
 

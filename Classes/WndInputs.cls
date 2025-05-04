@@ -47,7 +47,9 @@ Public Enum EInputType
     INPUT_KEYBOARD
     INPUT_HARDWARE
 End Enum
-
+'Private Enum LongPtr
+'    [Value]
+'End Enum
 'typedef struct tagINPUT {
 '  DWORD type;
 '  union {
@@ -87,13 +89,14 @@ Private Declare Function SendInput Lib "user32" (ByVal cInputs As Long, pInputs 
 
 'https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getlastinputinfo
 'BOOL GetLastInputInfo([out] PLASTINPUTINFO plii);
-Private Declare Function GetLastInputInfo Lib "user32" (ByRef plii As Long) As Long
+Private Declare Function GetLastInputInfo Lib "user32" (plii As Any) As Long
 'Remarks: This function is useful for input idle detection. For more information on tick counts, see GetTickCount.
 
 'https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow
 Private Declare Function SetForegroundWindow Lib "user32.dll" (ByVal hwnd As LongPtr) As Long
 Private m_hWndSender   As LongPtr 'hwnd of window FMain in this app
-Private m_hWndReceiver As LongPtr      'hwnd of any window to send inputs to
+Private m_hWndReceiver As LongPtr 'hwnd of any window to send inputs to
+Private m_Date  As Date
 Private m_Count As Long
 Private m_Arr() As HKMINPUT 'IINPUT
 
@@ -117,9 +120,17 @@ Public Property Get Count() As Long
     Count = m_Count
 End Property
 
+Function GetNextCapacity(ByVal Count As Long) As Long
+    Dim sqrt As Double: sqrt = VBA.Math.Sqr(Count)
+    Dim intsqrt As Long: intsqrt = Int(sqrt)
+    intsqrt = intsqrt + IIf(intsqrt < sqrt, 1, 0)
+    GetNextCapacity = 2 ^ intsqrt
+End Function
+
 Private Sub EnsureCapacity()
     If UBound(m_Arr) < m_Count Then
-        ReDim Preserve m_Arr(0 To m_Count * 2 - 1)
+        Dim ucap As Long: ucap = GetNextCapacity(m_Count) - 1
+        ReDim Preserve m_Arr(0 To ucap)
     End If
 End Sub
 
@@ -155,11 +166,12 @@ Public Property Get IsEmpty() As Boolean
 End Property
 
 Public Sub SwapItems(ByVal Index1 As Long, ByVal Index2 As Long)
+    If Index1 < 0 Or m_Count <= Index1 Then Exit Sub
     Dim tmpI1 As HKMINPUT: tmpI1 = m_Arr(Index1)
     m_Arr(Index1) = m_Arr(Index2): m_Arr(Index2) = tmpI1
 End Sub
 
-Public Property Get Item(ByVal Index As Long)
+Public Property Get Item(ByVal Index As Long) As Object
     If Index < 0 Or m_Count <= Index Then Exit Property
     Dim it As EInputType: it = Me.InputType(Index)
     Select Case it
@@ -182,6 +194,14 @@ Public Property Get ItemIK(ByVal Index As Long) As WndInputKeybd
     Set ItemIK = New WndInputKeybd: ItemIK.Ptr = VarPtr(m_Arr(Index))
 End Property
 
+Public Sub Remove(ByVal Index As Long)
+    Dim pDst As LongPtr: pDst = VarPtr(m_Arr(Index))
+    Dim pSrc As LongPtr: pSrc = VarPtr(m_Arr(Index + 1))
+    Dim blen As Long: blen = (m_Count - 1 - (Index)) * 28
+    RtlMoveMemory ByVal pDst, ByVal pSrc, blen
+    m_Count = m_Count - 1
+End Sub
+
 Public Sub Send()
     Dim hr As Long: hr = SetForegroundWindow(m_hWndReceiver)
     hr = SendInput(m_Count, m_Arr(0), 28)
@@ -196,3 +216,62 @@ Public Sub ToListBox(aLB As ListBox)
         aLB.AddItem Obj.Key
     Next
 End Sub
+
+Public Sub Save(ByVal aPFN As String)
+Try: On Error GoTo Catch
+    Dim FNr As Integer: FNr = FreeFile
+    Open aPFN For Binary Access Write As FNr
+    m_Date = Now
+    Put FNr, , m_Date
+    Put FNr, , m_Count
+    
+    'Put FNr, , m_Arr() ' Does not compile:
+                        ' -----------------
+                        ' (de) ' Fehler beim Kompilieren:
+                               ' Objektverweisvariable oder Variable eines
+                               ' benutzerdefinierten Typs, die einen Objektverweis enthält,
+                               ' unterstützt Get oder Put nicht
+                        ' (en) ' Error during compile:
+                               ' Object instance or variable of user defined type containing object instances
+                               ' is not supported by Get or Put
+    ' so we have to do it this way:
+    Dim i As Long
+    For i = 0 To m_Count - 1
+        Put FNr, , m_Arr(i).dwType
+        Put FNr, , m_Arr(i).Value1
+        Put FNr, , m_Arr(i).Value2
+        Put FNr, , m_Arr(i).Value3
+        Put FNr, , m_Arr(i).Value4
+        Put FNr, , m_Arr(i).Value5
+        Put FNr, , m_Arr(i).Value6
+    Next
+    GoTo Finally
+Catch: MsgBox Err.Number & " " & Err.Description
+Finally: Close FNr
+End Sub
+
+Public Sub Read(ByVal aPFN As String)
+Try: On Error GoTo Catch
+    Dim FNr As Integer: FNr = FreeFile
+    Open aPFN For Binary Access Read As FNr
+    Get FNr, , m_Date
+    Get FNr, , m_Count
+    EnsureCapacity
+    'ReDim m_Arr(0 To m_Count - 1)
+    'Get FNr, , m_Arr
+    Dim i As Long
+    For i = 0 To m_Count - 1
+        Get FNr, , m_Arr(i).dwType
+        Get FNr, , m_Arr(i).Value1
+        Get FNr, , m_Arr(i).Value2
+        Get FNr, , m_Arr(i).Value3
+        Get FNr, , m_Arr(i).Value4
+        Get FNr, , m_Arr(i).Value5
+        Get FNr, , m_Arr(i).Value6
+    Next
+    GoTo Finally
+Catch: MsgBox Err.Number & " " & Err.Description
+Finally: Close FNr
+End Sub
+
+

@@ -676,6 +676,7 @@ End Property
 Public Property Let ListBox_EKeyEventFlags(this As ListBox, ByVal e As EKeyEventFlags)
     'selects the elements in the Listbox if in e
     Dim i As Long, s As String, tmpe As EKeyEventFlags
+    If e = 0 Then this.Selected(0) = True
     For i = 0 To this.ListCount - 1
         s = this.List(i)
         tmpe = EKeyEventFlags_Parse(s)
@@ -683,18 +684,15 @@ Public Property Let ListBox_EKeyEventFlags(this As ListBox, ByVal e As EKeyEvent
     Next
 End Property
 
-Public Sub EKeyEventFlags_Select(aLst As ListBox, e As EKeyEventFlags)
-End Sub
-
-Public Function EKeyEventFlags_Read(aLst As ListBox) As EKeyEventFlags
-    'selects the elements in then Listbox if in e
-    Dim i As Long, s As String, tmpe As EKeyEventFlags
-    For i = 0 To aLst.ListCount - 1
-        s = aLst.List(i)
-        tmpe = EKeyEventFlags_Parse(s)
-        If e And tmpe Then aLst.Selected(i) = True
-    Next
-End Function
+'Public Function EKeyEventFlags_Read(aLst As ListBox) As EKeyEventFlags
+'    'selects the elements in then Listbox if in e
+'    Dim i As Long, s As String, tmpe As EKeyEventFlags
+'    For i = 0 To aLst.ListCount - 1
+'        s = aLst.List(i)
+'        tmpe = EKeyEventFlags_Parse(s)
+'        If e And tmpe Then aLst.Selected(i) = True
+'    Next
+'End Function
 
 ' ^ ' ############################## ' ^ '     EKeyEventFlags      ' ^ ' ############################## ' ^ '
 
@@ -715,7 +713,7 @@ Public Function EMouseEventFlags_ToStr(ByVal e As EMouseEventFlags) As String
     If e And EMouseEventFlags.MOUSEEVENTF_MOVE_NOCOALESCE Then s = s & IIf(Len(s), sOr, "") & "MOVE_NOCOALESCE "
     If e And EMouseEventFlags.MOUSEEVENTF_VIRTUALDESK Then s = s & IIf(Len(s), sOr, "") & "VIRTUALDESK "
     If e And EMouseEventFlags.MOUSEEVENTF_ABSOLUTE Then s = s & IIf(Len(s), sOr, "") & "ABSOLUTE "
-    EKeyEventFlags_ToStr = s
+    EMouseEventFlags_ToStr = s
 End Function
 
 Public Function EMouseEventFlags_Parse(ByVal s As String) As EMouseEventFlags
@@ -734,7 +732,40 @@ Public Function EMouseEventFlags_Parse(ByVal s As String) As EMouseEventFlags
     If InStr(s, "MOVE_NOCOALESCE ") Then e = e Or EMouseEventFlags.MOUSEEVENTF_MOVE_NOCOALESCE
     If InStr(s, "VIRTUALDESK ") Then e = e Or EMouseEventFlags.MOUSEEVENTF_VIRTUALDESK
     If InStr(s, "ABSOLUTE ") Then e = e Or EMouseEventFlags.MOUSEEVENTF_ABSOLUTE
-    EKeyEventFlags_Parse = e
+    EMouseEventFlags_Parse = e
 End Function
+
+Public Sub EMouseEventFlags_ToList(aLst)
+    aLst.Clear
+    Dim i As Long, s As String
+    s = EMouseEventFlags_ToStr(i): If Len(s) Then aLst.AddItem s
+    For i = 0 To 14
+        s = EMouseEventFlags_ToStr(2 ^ i): If Len(s) Then aLst.AddItem s
+    Next
+End Sub
+
+Public Property Get ListBox_EMouseEventFlags(this As ListBox) As EMouseEventFlags
+    'reads the selected elements in the Listbox into e
+    Dim i As Long, s As String, tmpe As EMouseEventFlags
+    Dim e As EKeyEventFlags
+    For i = 0 To this.ListCount - 1
+        If this.Selected(i) Then
+            s = this.List(i)
+            tmpe = EMouseEventFlags_Parse(s)
+            e = e Or tmpe
+        End If
+    Next
+    ListBox_EMouseEventFlags = e
+End Property
+Public Property Let ListBox_EMouseEventFlags(this As ListBox, ByVal e As EMouseEventFlags)
+    'selects the elements in the Listbox if in e
+    Dim i As Long, s As String, tmpe As EMouseEventFlags
+    For i = 0 To this.ListCount - 1
+        s = this.List(i)
+        tmpe = EMouseEventFlags_Parse(s)
+        If e And tmpe Then this.Selected(i) = True
+    Next
+End Property
+
 ' ^ ' ############################## ' ^ '    EMouseEventFlags     ' ^ ' ############################## ' ^ '
 

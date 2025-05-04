@@ -23,6 +23,7 @@ Private Type KEYBDINPUT
     dwExtraInfo As LongPtr         ' 4/8
 End Type                     ' Sum: 20
 
+
 Private Type PKEYBDINPUT
     SAPtr As TUDTPtr
     Arr() As KEYBDINPUT
@@ -33,7 +34,7 @@ Private m_Data  As KEYBDINPUT
 
 Private Sub Class_Initialize()
     m_Data.dwType = EInputType.INPUT_KEYBOARD
-    MPtr.New_UDTPtr m_Value.SAPtr, FADF_AUTO Or FADF_FIXEDSIZE Or FADF_RECORD, 16 '24
+    MPtr.New_UDTPtr m_Value.SAPtr, FADF_AUTO Or FADF_FIXEDSIZE Or FADF_RECORD, 24
     MPtr.SAPtr(ArrPtr(m_Value.Arr)) = m_Value.SAPtr.pSA
     m_Value.SAPtr.pvData = VarPtr(m_Data)
 End Sub
@@ -42,7 +43,6 @@ Private Sub Class_Terminate()
     MPtr.ZeroSAPtr ArrPtr(m_Value.Arr)
 End Sub
 Friend Sub New_(VirtKey As Integer, Scan As Integer, Flags As EKeyEventFlags, aTime As Long)
-    'If pData Then m_Value.SAPtr.pvData = pData
     With Me: .VirtKeyCode = VirtKey: .Scan = Scan: .Flags = Flags: .Time = aTime: End With
 End Sub
 'Copy to MNew:
