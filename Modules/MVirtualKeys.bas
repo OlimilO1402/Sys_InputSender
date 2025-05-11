@@ -426,7 +426,7 @@ Public Sub EVirtualKeyCodes_ToList(aCmb As ComboBox)
     aCmb.AddItem s
     For i = 0 To 300
         s = EVirtualKeyCodes_ToStr(i)
-        If Len(s) Then aCmb.AddItem s
+        If Len(s) Then aCmb.AddItem s ' i & ", 0x" & Hex(i) & ", " & s
     Next
 End Sub
 

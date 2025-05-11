@@ -2,8 +2,8 @@ VERSION 5.00
 Begin VB.Form FKeyboard 
    Caption         =   "InputSender Keyboard, Mouse, Hardware"
    ClientHeight    =   4815
-   ClientLeft      =   120
-   ClientTop       =   465
+   ClientLeft      =   225
+   ClientTop       =   870
    ClientWidth     =   19695
    BeginProperty Font 
       Name            =   "Segoe UI"
@@ -1553,6 +1553,33 @@ Begin VB.Form FKeyboard
       Top             =   120
       Width           =   1245
    End
+   Begin VB.Menu mnuFile 
+      Caption         =   "&File"
+      Begin VB.Menu mnuFileNew 
+         Caption         =   "&New"
+      End
+      Begin VB.Menu mnuFileOpen 
+         Caption         =   "&Open..."
+      End
+      Begin VB.Menu mnuFileSave 
+         Caption         =   "&Save"
+      End
+      Begin VB.Menu mnuFileSaveAs 
+         Caption         =   "Save &As..."
+      End
+      Begin VB.Menu mnuFileSep 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuFileExit 
+         Caption         =   "E&xit"
+      End
+   End
+   Begin VB.Menu mnuHelp 
+      Caption         =   " &? "
+      Begin VB.Menu mnuHelpInfo 
+         Caption         =   "&Info"
+      End
+   End
 End
 Attribute VB_Name = "FKeyboard"
 Attribute VB_GlobalNameSpace = False
@@ -1577,11 +1604,16 @@ End Sub
 Sub SetBtnKeyTooltip()
     Dim i As Long
     Dim btn As CommandButton
-    For i = BtnKey.LBound To BtnKey.UBound ' BtnKey.Count ' - 1
-        Set btn = BtnKey.Item(i)
-        On Error Resume Next
-        btn.ToolTipText = "VKey: " & i
+'    For i = BtnKey.LBound To BtnKey.UBound ' BtnKey.Count ' - 1
+'        Set btn = BtnKey.Item(i)
+'        On Error Resume Next
+'        btn.ToolTipText = "VKey: " & i
+'    Next
+    For Each btn In BtnKey
+        i = btn.Index
+        btn.ToolTipText = "VKey: " & i & ", 0x" & Hex(i) & ", " & MVirtualKeys.EVirtualKeyCodes_ToStr(i)
     Next
+    
     ' Right-Shift is the same VkCode as Left-Shift = 16 , but we can not have twice the same Index
     ' for a CommandButton so I decided to give the button for Right-Shift the index 256 + 16 = 272
     BtnKey(272).ToolTipText = "VKey: " & EVirtualKeyCodes.VK_SHIFT
@@ -1690,6 +1722,27 @@ Private Sub LstWndInputs_DblClick()
     If i < 0 Then Exit Sub
     Dim Obj: Set Obj = m_WInputs.Item(i)
     Obj.Edit
+End Sub
+
+Private Sub mnuFileNew_Click()
+    m_WInputs.Clear
+    UpdateView
+End Sub
+
+Private Sub mnuFileOpen_Click()
+    '
+End Sub
+
+Private Sub mnuFileSave_Click()
+    '
+End Sub
+
+Private Sub mnuFileSaveAs_Click()
+    '
+End Sub
+
+Private Sub mnuHelpInfo_Click()
+    MsgBox App.CompanyName & " " & App.ProductName & " " & App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision & vbCrLf & App.FileDescription
 End Sub
 
 Private Sub mWndPicker_Found(ByVal aHWnd As LongPtr, ByVal WndCaption As String)

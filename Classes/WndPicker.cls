@@ -80,7 +80,7 @@ Private Sub Class_Terminate()
 End Sub
 
 Friend Sub New_(aTimer As Timer, aButton As CommandButton)
-    Set mTimer = aTimer: mTimer.Interval = 100: mTimer.Enabled = False
+    Set mTimer = aTimer: mTimer.Interval = 10: mTimer.Enabled = False
     Set mButton = aButton
 End Sub
 

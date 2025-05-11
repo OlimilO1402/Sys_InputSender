@@ -121,10 +121,10 @@ Public Property Get Count() As Long
 End Property
 
 Function GetNextCapacity(ByVal Count As Long) As Long
-    Dim sqrt As Double: sqrt = VBA.Math.Sqr(Count)
-    Dim intsqrt As Long: intsqrt = Int(sqrt)
-    intsqrt = intsqrt + IIf(intsqrt < sqrt, 1, 0)
-    GetNextCapacity = 2 ^ intsqrt
+    Dim sq As Double: sq = VBA.Math.Sqr(Count)
+    Dim isq As Long: isq = Int(sq)
+    isq = isq + IIf(isq < sq, 1, 0)
+    GetNextCapacity = 2 ^ isq
 End Function
 
 Private Sub EnsureCapacity()
@@ -140,22 +140,22 @@ Public Sub Add(Obj)
     m_Count = m_Count + 1
 End Sub
 
-Public Function AddInputMouse(Obj As WndInputMouse) As WndInputMouse
-    Set AddInputMouse = Obj
-    Add Obj
-    'EnsureCapacity
-    'Obj.Ptr = VarPtr(m_Arr(m_Count)): Obj.SetData
-    'm_Count = m_Count + 1
-End Function
-
-Public Function AddInputKeybd(Obj As WndInputKeybd) As WndInputKeybd
-    Set AddInputKeybd = Obj
-    Add Obj
-    'EnsureCapacity
-    'Obj.Ptr = VarPtr(m_Arr(m_Count)): Obj.SetData
-    'm_Count = m_Count + 1
-End Function
-
+'Public Function AddInputMouse(Obj As WndInputMouse) As WndInputMouse
+'    Set AddInputMouse = Obj
+'    Add Obj
+'    'EnsureCapacity
+'    'Obj.Ptr = VarPtr(m_Arr(m_Count)): Obj.SetData
+'    'm_Count = m_Count + 1
+'End Function
+'
+'Public Function AddInputKeybd(Obj As WndInputKeybd) As WndInputKeybd
+'    Set AddInputKeybd = Obj
+'    Add Obj
+'    'EnsureCapacity
+'    'Obj.Ptr = VarPtr(m_Arr(m_Count)): Obj.SetData
+'    'm_Count = m_Count + 1
+'End Function
+'
 Public Property Get InputType(ByVal Index As Long) As EInputType
     If Index < 0 Or m_Count <= Index Then Exit Property
     InputType = m_Arr(Index).dwType
@@ -182,19 +182,31 @@ Public Property Get Item(ByVal Index As Long) As Object
     Item.Ptr = VarPtr(m_Arr(Index))
 End Property
 
-Public Property Get ItemIM(ByVal Index As Long) As WndInputMouse
-    If Index < 0 Or m_Count <= Index Then Exit Property
-    If Me.InputType(Index) <> INPUT_MOUSE Then Exit Property
-    Set ItemIM = New WndInputMouse: ItemIM.Ptr = VarPtr(m_Arr(Index))
-End Property
+'Public Property Get ItemIM(ByVal Index As Long) As WndInputMouse
+'    If Index < 0 Or m_Count <= Index Then Exit Property
+'    If Me.InputType(Index) <> INPUT_MOUSE Then Exit Property
+'    Set ItemIM = New WndInputMouse: ItemIM.Ptr = VarPtr(m_Arr(Index))
+'End Property
+'
+'Public Property Get ItemIK(ByVal Index As Long) As WndInputKeybd
+'    If Index < 0 Or m_Count <= Index Then Exit Property
+'    If Me.InputType(Index) <> INPUT_KEYBOARD Then Exit Property
+'    Set ItemIK = New WndInputKeybd: ItemIK.Ptr = VarPtr(m_Arr(Index))
+'End Property
 
-Public Property Get ItemIK(ByVal Index As Long) As WndInputKeybd
-    If Index < 0 Or m_Count <= Index Then Exit Property
-    If Me.InputType(Index) <> INPUT_KEYBOARD Then Exit Property
-    Set ItemIK = New WndInputKeybd: ItemIK.Ptr = VarPtr(m_Arr(Index))
-End Property
+Public Sub Insert(ByVal Index As Long, Obj)
+    If Index < 0 Or m_Count <= Index Then Exit Sub
+    m_Count = m_Count + 1
+    EnsureCapacity
+    Dim pDst As LongPtr: pDst = VarPtr(m_Arr(Index + 1))
+    Dim pSrc As LongPtr: pSrc = VarPtr(m_Arr(Index))
+    Dim blen As Long: blen = (m_Count - 1 - (Index)) * 28
+    RtlMoveMemory ByVal pDst, ByVal pSrc, blen
+    Obj.Ptr = VarPtr(m_Arr(Index)): Obj.SetData
+End Sub
 
 Public Sub Remove(ByVal Index As Long)
+    If Index < 0 Or m_Count <= Index Then Exit Sub
     Dim pDst As LongPtr: pDst = VarPtr(m_Arr(Index))
     Dim pSrc As LongPtr: pSrc = VarPtr(m_Arr(Index + 1))
     Dim blen As Long: blen = (m_Count - 1 - (Index)) * 28
