@@ -3,7 +3,7 @@
 
 [![GitHub](https://img.shields.io/github/license/OlimilO1402/Sys_InputSender?style=plastic)](https://github.com/OlimilO1402/Sys_InputSender/blob/master/LICENSE) 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/OlimilO1402/Sys_InputSender?style=plastic)](https://github.com/OlimilO1402/Sys_InputSender/releases/latest)
-[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/Sys_InputSender/total.svg)](https://github.com/OlimilO1402/Sys_InputSender/releases/download/v1.0.0/Sys_InputSender_v2025.5.14.zip)
+[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/Sys_InputSender/total.svg)](https://github.com/OlimilO1402/Sys_InputSender/releases/download/v2025.5.14/InputSender_v2025.5.14.zip)
 ![GitHub followers](https://img.shields.io/github/followers/OlimilO1402?style=social)
 
 
