@@ -1755,7 +1755,7 @@ End Sub
 Private Sub BtnKey_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = MouseButtonConstants.vbRightButton Then
         m_AtOnce = True
-        m_InQueue.AddInputKeybd MNew.WndInputKeybd(Index, 0, 0, 0)
+        m_InQueue.Add MNew.WndInputKeybd(Index, 0, 0, 0)
     End If
 End Sub
 
@@ -1798,10 +1798,10 @@ Private Sub BtnKey_Click(Index As Integer)
         Exit Sub
     End If
     m_WInputs.Clear
-    m_WInputs.AddInputKeybd MNew.WndInputKeybd(VKey0, 0, 0, 0)
-    m_WInputs.AddInputKeybd MNew.WndInputKeybd(VKey0, 0, EKeyEventFlags.KEYEVENTF_KEYUP, 0)
+    m_WInputs.Add MNew.WndInputKeybd(VKey0, 0, 0, 0)
+    m_WInputs.Add MNew.WndInputKeybd(VKey0, 0, EKeyEventFlags.KEYEVENTF_KEYUP, 0)
     If VKey1 > 0 Then
-        m_WInputs.AddInputKeybd MNew.WndInputKeybd(VKey1, 0, KEYEVENTF_KEYUP, 0)
+        m_WInputs.Add MNew.WndInputKeybd(VKey1, 0, KEYEVENTF_KEYUP, 0)
     End If
     m_WInputs.Send
 End Sub

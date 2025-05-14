@@ -249,13 +249,15 @@ Try: On Error GoTo Catch
     ' so we have to do it this way:
     Dim i As Long
     For i = 0 To m_Count - 1
-        Put FNr, , m_Arr(i).dwType
-        Put FNr, , m_Arr(i).Value1
-        Put FNr, , m_Arr(i).Value2
-        Put FNr, , m_Arr(i).Value3
-        Put FNr, , m_Arr(i).Value4
-        Put FNr, , m_Arr(i).Value5
-        Put FNr, , m_Arr(i).Value6
+        With m_Arr(i)
+            Put FNr, , .dwType
+            Put FNr, , .Value1
+            Put FNr, , .Value2
+            Put FNr, , .Value3
+            Put FNr, , .Value4
+            Put FNr, , .Value5
+            Put FNr, , .Value6
+        End With
     Next
     GoTo Finally
 Catch: MsgBox Err.Number & " " & Err.Description
@@ -268,18 +270,20 @@ Try: On Error GoTo Catch
     Open aPFN For Binary Access Read As FNr
     Get FNr, , m_Date
     Get FNr, , m_Count
-    EnsureCapacity
+    EnsureCapacity m_Count
     'ReDim m_Arr(0 To m_Count - 1)
     'Get FNr, , m_Arr
     Dim i As Long
     For i = 0 To m_Count - 1
-        Get FNr, , m_Arr(i).dwType
-        Get FNr, , m_Arr(i).Value1
-        Get FNr, , m_Arr(i).Value2
-        Get FNr, , m_Arr(i).Value3
-        Get FNr, , m_Arr(i).Value4
-        Get FNr, , m_Arr(i).Value5
-        Get FNr, , m_Arr(i).Value6
+        With m_Arr(i)
+            Get FNr, , .dwType
+            Get FNr, , .Value1
+            Get FNr, , .Value2
+            Get FNr, , .Value3
+            Get FNr, , .Value4
+            Get FNr, , .Value5
+            Get FNr, , .Value6
+        End With
     Next
     GoTo Finally
 Catch: MsgBox Err.Number & " " & Err.Description

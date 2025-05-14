@@ -1,21 +1,16 @@
-# <App_Name>  
-## <App short description>  
+# Sys_InputSender  
+## Sending keystrokes, mouse-moves or mouse-clicks to the active window  
 
-[![GitHub](https://img.shields.io/github/license/OlimilO1402/<App_Name>?style=plastic)](https://github.com/OlimilO1402/<App_Name>/blob/master/LICENSE) 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/OlimilO1402/<App_Name>?style=plastic)](https://github.com/OlimilO1402/<App_Name>/releases/latest)
-[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/<App_Name>/total.svg)](https://github.com/OlimilO1402/<App_Name>/releases/download/v1.0.0/<App_Name>_v1.0.0.zip)
+[![GitHub](https://img.shields.io/github/license/OlimilO1402/Sys_InputSender?style=plastic)](https://github.com/OlimilO1402/Sys_InputSender/blob/master/LICENSE) 
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/OlimilO1402/Sys_InputSender?style=plastic)](https://github.com/OlimilO1402/Sys_InputSender/releases/latest)
+[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/Sys_InputSender/total.svg)](https://github.com/OlimilO1402/Sys_InputSender/releases/download/v1.0.0/Sys_InputSender_v2025.5.14.zip)
 ![GitHub followers](https://img.shields.io/github/followers/OlimilO1402?style=social)
 
 
-Project started around mid 2012.  
-This example shows how to implement the IEnumVariant-Interface for supporting the "for each"-language-feature in your own list class, by using a lightweight-object. The contained list-class is just an example of a prototype of a list.  
+Project started in april 2025.  
+This example shows how to use the API [SendInput](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendinput) for sending keystrokes or mouseevents to the active window.
+It uses the udt-pointer method in a otherwise fully object oriented environment in VBC, just like you would use a pointer to a structure in other languages (like C).  
+The udt-pointer method for VB was invented by me and published at ActiveVB in 2008.  
 
-```vba
-Public Function Foo() As Variant
-	'
-End Function
-```
 
-[Link text Here](https://link-url-here.org) 
-
-![IEnumVarImpl Image](Resources/IEnumVarImpl.png "IEnumVarImpl Image")
+![InputSender Image](Resources/InputSender.png "InputSender Image")
