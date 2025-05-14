@@ -1701,6 +1701,7 @@ End Sub
 Public Sub UpdateView()
     Dim i As Long: i = LstWndInputs.ListIndex
     m_WInputs.ToListBox Me.LstWndInputs
+    If LstWndInputs.ListCount <= i Then Exit Sub
     LstWndInputs.ListIndex = i
 End Sub
 
@@ -1730,7 +1731,7 @@ Private Sub mnuFileNew_Click()
 End Sub
 
 Private Sub mnuFileOpen_Click()
-    '
+    Dim PFN As String
 End Sub
 
 Private Sub mnuFileSave_Click()
@@ -1817,7 +1818,7 @@ End Sub
 'End Sub
 
 Private Sub Form_Resize()
-    Dim L As Single, T As Single, W As Single, H As Single
+    Dim l As Single, T As Single, W As Single, H As Single
     Dim B As Single: B = 2 * 8 * Screen.TwipsPerPixelX
     FraMediaKeys.Visible = ChkShowMediaKeys.Value = vbChecked
     FraBrowserKeys.Visible = ChkShowBrowserKeys.Value = vbChecked
@@ -1828,51 +1829,51 @@ Private Sub Form_Resize()
     If FraMediaKeys.Visible Then
         T = FraMediaKeys.Top
         W = FraMediaKeys.Width: H = FraMediaKeys.Height
-        If W > 0 And H > 0 Then FraMediaKeys.Move L, T, W, H
-        L = L + W
+        If W > 0 And H > 0 Then FraMediaKeys.Move l, T, W, H
+        l = l + W
     End If
     If FraBrowserKeys.Visible Then
         T = FraBrowserKeys.Top
         W = FraBrowserKeys.Width: H = FraBrowserKeys.Height
-        If W > 0 And H > 0 Then FraBrowserKeys.Move L, T, W, H
-        L = L + W
+        If W > 0 And H > 0 Then FraBrowserKeys.Move l, T, W, H
+        l = l + W
     End If
     If FraSpecialKeys.Visible Then
         T = FraSpecialKeys.Top
         W = FraSpecialKeys.Width: H = FraSpecialKeys.Height
-        If W > 0 And H > 0 Then FraSpecialKeys.Move L, T, W, H
-        L = L + W
+        If W > 0 And H > 0 Then FraSpecialKeys.Move l, T, W, H
+        l = l + W
     End If
-    L = 0: T = IIf(T, T + H, FraMediaKeys.Top)
+    l = 0: T = IIf(T, T + H, FraMediaKeys.Top)
     
     W = PnlKeyboard.Width
     H = PnlKeyboard.Height
-    If W > 0 And H > 0 Then PnlKeyboard.Move L, T, W, H
+    If W > 0 And H > 0 Then PnlKeyboard.Move l, T, W, H
     T = 0
-    L = PnlStandardKeys.Left
+    l = PnlStandardKeys.Left
     If PnlF13F24.Visible Then
         W = PnlF13F24.Width: H = PnlF13F24.Height
-        If W > 0 And H > 0 Then PnlF13F24.Move L, T, W, H
+        If W > 0 And H > 0 Then PnlF13F24.Move l, T, W, H
         T = T + H
     End If
-    L = PnlStandardKeys.Left
+    l = PnlStandardKeys.Left
     W = PnlStandardKeys.Width
     H = PnlStandardKeys.Height
-    PnlStandardKeys.Move L, T, W, H
-    L = PnlStandardKeys.Left + W + B
+    PnlStandardKeys.Move l, T, W, H
+    l = PnlStandardKeys.Left + W + B
     PnlStandardKeys.ZOrder 0
     W = 0
     If PnlCursorKeys.Visible Then
         W = PnlCursorKeys.Width
         H = PnlCursorKeys.Height
-        If W > 0 And H > 0 Then PnlCursorKeys.Move L, T, W, H
+        If W > 0 And H > 0 Then PnlCursorKeys.Move l, T, W, H
         W = W + B
     End If
-    L = L + W '+ b
+    l = l + W '+ b
     If PnlNumpad.Visible Then
         W = PnlNumpad.Width
         H = PnlNumpad.Height
-        If W > 0 And H > 0 Then PnlNumpad.Move L, T, W, H
+        If W > 0 And H > 0 Then PnlNumpad.Move l, T, W, H
     End If
 End Sub
 

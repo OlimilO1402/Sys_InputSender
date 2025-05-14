@@ -123,19 +123,19 @@ End Property
 Function GetNextCapacity(ByVal Count As Long) As Long
     Dim sq As Double: sq = VBA.Math.Sqr(Count)
     Dim isq As Long: isq = Int(sq)
-    isq = isq + IIf(isq < sq, 1, 0)
+    isq = isq + IIf(isq <= sq, 1, 0)
     GetNextCapacity = 2 ^ isq
 End Function
 
-Private Sub EnsureCapacity()
-    If UBound(m_Arr) < m_Count Then
-        Dim ucap As Long: ucap = GetNextCapacity(m_Count) - 1
+Private Sub EnsureCapacity(ByVal Count As Long)
+    If UBound(m_Arr) < Count Then
+        Dim ucap As Long: ucap = GetNextCapacity(Count) - 1
         ReDim Preserve m_Arr(0 To ucap)
     End If
 End Sub
 
 Public Sub Add(Obj)
-    EnsureCapacity
+    EnsureCapacity m_Count + 1
     Obj.Ptr = VarPtr(m_Arr(m_Count)): Obj.SetData
     m_Count = m_Count + 1
 End Sub
@@ -196,13 +196,13 @@ End Property
 
 Public Sub Insert(ByVal Index As Long, Obj)
     If Index < 0 Or m_Count <= Index Then Exit Sub
-    m_Count = m_Count + 1
-    EnsureCapacity
+    EnsureCapacity m_Count + 1
     Dim pDst As LongPtr: pDst = VarPtr(m_Arr(Index + 1))
     Dim pSrc As LongPtr: pSrc = VarPtr(m_Arr(Index))
     Dim blen As Long: blen = (m_Count - 1 - (Index)) * 28
     RtlMoveMemory ByVal pDst, ByVal pSrc, blen
     Obj.Ptr = VarPtr(m_Arr(Index)): Obj.SetData
+    m_Count = m_Count + 1
 End Sub
 
 Public Sub Remove(ByVal Index As Long)
