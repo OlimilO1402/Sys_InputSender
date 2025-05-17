@@ -6,6 +6,9 @@
 [![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/Sys_InputSender/total.svg)](https://github.com/OlimilO1402/Sys_InputSender/releases/download/v2025.5.14/InputSender_v2025.5.14.zip)
 ![GitHub followers](https://img.shields.io/github/followers/OlimilO1402?style=social)
 
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/:user/:repo/total)
+
+
 
 Project started in april 2025.  
 This example shows how to use the API [SendInput](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendinput) for sending keystrokes or mouseevents to the active window.

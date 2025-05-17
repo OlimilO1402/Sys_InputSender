@@ -219,6 +219,8 @@ Public Enum EMouseEventFlags
     MOUSEEVENTF_VIRTUALDESK = &H4000      'Maps coordinates to the entire desktop. Must be used with MOUSEEVENTF_ABSOLUTE.
     MOUSEEVENTF_ABSOLUTE = &H8000         'The dx and dy members contain normalized absolute coordinates. If the flag is not set, dxand dy contain relative data (the change in position since the last reported position). This flag can be set, or not set, regardless of what kind of mouse or other pointing device, if any, is connected to the system. For further information about relative mouse motion, see the following Remarks section.
 End Enum
+Private m_VKeyNmInit  As Boolean
+Private m_VKeyNames() As String
 
 ' v ' ############################## ' v '    EVirtualKeyCodes     ' v ' ############################## ' v '
 Public Function EVirtualKeyCodes_ToStr(ByVal e As EVirtualKeyCodes) As String
@@ -424,10 +426,17 @@ Public Sub EVirtualKeyCodes_ToList(aCmb As ComboBox)
     aCmb.Clear
     Dim i As Long, s As String
     aCmb.AddItem s
+    If Not m_VKeyNmInit Then ReDim m_VKeyNames(0 To 300)
     For i = 0 To 300
-        s = EVirtualKeyCodes_ToStr(i)
+        If m_VKeyNmInit Then
+            s = m_VKeyNames(i)
+        Else
+            s = EVirtualKeyCodes_ToStr(i)
+            m_VKeyNames(i) = s
+        End If
         If Len(s) Then aCmb.AddItem s ' i & ", 0x" & Hex(i) & ", " & s
     Next
+    m_VKeyNmInit = True
 End Sub
 
 Public Function EVirtualKeyCodes_Parse(ByVal s As String) As EVirtualKeyCodes
