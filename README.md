@@ -22,7 +22,8 @@ MOUSEINPUT & KEYBDINPUT
 -----------------------
 With MOUSEINPUT you simulate mouse-movemements and mouse-clicks. With KEYBDINPUT you simulate Key-down events and key-up events. 
 But be careful, you have to know what you do, because with it you can easily screw up your system, and it may behave weird.
-After a key-down of any key, a key-up must follow. e.g. Shift-key-down + A-Key-down + A-Key-up + Shift-Key-up: result is the upper case letter "A".
+After a key-down of any key, a key-up must follow. e.g.  
+Shift-key-down + A-Key-down + A-Key-up + Shift-Key-up: result is the upper case letter "A".
 
 HARDWAREINPUT
 -------------
@@ -41,8 +42,9 @@ You may wonder anyway what the heck is a "union"? A union is a datatype which us
 In a typical fully object oriented windows desktop app, of course the user wants to create and change and edit or delete the data.
 When we want to make use of the SendInput function in a fully editable way we must find a way to use the union.  
 To deal with the array of struct and union in VB we could use different approaches:
-* we could copy all data in and out the array for every editing
-* we could leave the data in the memory block and use a pointer instead  
+a) we could collect all data anywhere in the heap memory, and at the time when SendInput is called we copy all data to an array
+b) we could copy all data in and out the array for every editing
+c) we could leave the data in the memory block and use a pointer instead  
 
 Pointer to a Structure
 ----------------------
@@ -52,7 +54,7 @@ The udt-pointer method for VB
 -----------------------------
 After playing around with SafeArrays I figured out how to use it with ud-types, and shared it with other VB-coders at ActiveVB in 2008.  
 How does the udt-pointer method work? We copy the pointer to a SafeArray-descriptor into an empty array of ud-type, and set the pvData-pointer where we want it to point to. 
-We create a class for every Input-structure MOUSEINPUT KEYBDINPUT and HARDWAREINPUT. Every class holds a SafeArray-descriptor and a variable of its input-type
+We create a class for every Input-structure MOUSEINPUT KEYBDINPUT and HARDWAREINPUT. Every class holds a SafeArray-descriptor and a variable of its input-type.
 During creation of the object the pvDate of the SafeArray-descriptor points to the internal input-variable. When we add the object to the Array-List, pvData will be set to point to the variable in the array and the data will be copied to the array, with just a private udtype-assignment inside the class. It is even not necessary to get access to the Array in the List itself. The object now gets freed, as we no longer need it.
 
 ![InputSender Image](Resources/InputSender.png "InputSender Image")
