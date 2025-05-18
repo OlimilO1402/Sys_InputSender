@@ -52,7 +52,7 @@ Of course in C we would use a pointer to the struct INPUT. This repo Sys_InputSe
 
 The udt-pointer method for VB
 -----------------------------
-After playing around with SafeArrays I figured out how to use it with ud-types, and shared it with other VB-coders at ActiveVB in 2008.  
+After playing around with SafeArrays I figured out how to use it with ud-types, and shared my findings with other VB-coders at ActiveVB in 2008.  
 How does the udt-pointer method work? We copy the pointer to a SafeArray-descriptor into an empty array of ud-type, and set the pvData-pointer where we want it to point to. 
 We create a class for every Input-structure MOUSEINPUT KEYBDINPUT and HARDWAREINPUT. Every class holds a SafeArray-descriptor and a variable of its input-type.
 During creation of the object the pvDate of the SafeArray-descriptor points to the internal input-variable. When we add the object to the Array-List, pvData will be set to point to the variable in the array and the data will be copied to the array, with just a private udtype-assignment inside the class. It is even not necessary to get access to the Array in the List itself. The object now gets freed, as we no longer need it.
