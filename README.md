@@ -41,10 +41,10 @@ The Union in struct INPUT
 You may wonder anyway what the heck is a "union"? A union is a datatype which uses the same memory for different datatypes of different meaning and purposes, btw. just like the VB intrinsic datatype Variant does. Other than Variant, VB is not capable of creating a union type out of the box, we have to use a little bit of a trick.
 In a typical fully object oriented windows desktop app, of course the user wants to create and change and edit or delete the data.
 When we want to make use of the SendInput function in a fully editable way we must find a way to use the union.  
-To deal with the array of struct and union in VB we could use different approaches:
-a) we could collect all data anywhere in the heap memory, and at the time when SendInput is called we copy all data to an array
-b) we could copy all data in and out the array for every editing
-c) we could leave the data in the memory block and use a pointer instead  
+To deal with the array of struct and union in VB we could use different approaches:  
+a) we could collect all data anywhere in the heap memory, and at the time when SendInput is called we copy all data to an array  
+b) we could copy all data in and out the array for every editing  
+c) we could leave the data in the memory block and use a pointer instead    
 
 Pointer to a Structure
 ----------------------
