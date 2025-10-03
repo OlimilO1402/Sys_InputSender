@@ -3,7 +3,7 @@
 
 [![GitHub](https://img.shields.io/github/license/OlimilO1402/Sys_InputSender?style=plastic)](https://github.com/OlimilO1402/Sys_InputSender/blob/master/LICENSE) 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/OlimilO1402/Sys_InputSender?style=plastic)](https://github.com/OlimilO1402/Sys_InputSender/releases/latest)
-[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/Sys_InputSender/total.svg)](https://github.com/OlimilO1402/Sys_InputSender/releases/download/v2025.5.14/InputSender_v2025.5.14.zip)
+[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/Sys_InputSender/total.svg)](https://github.com/OlimilO1402/Sys_InputSender/releases/download/v2025.10.3/InputSender_v2025.10.3.zip)
 ![GitHub followers](https://img.shields.io/github/followers/OlimilO1402?style=social)
 
 
@@ -24,6 +24,7 @@ With MOUSEINPUT you simulate mouse-movemements and mouse-clicks. With KEYBDINPUT
 But be careful, you have to know what you do, because with it you can easily screw up your system, and it could behave very weird.
 After a key-down of any key, a key-up must follow. e.g.  
 Shift-key-down + A-key-down + A-key-up + Shift-key-up: result is the upper case letter "A".
+The same applies for mouseinputs after a mouse-down a mouse-up must follow.
 
 HARDWAREINPUT
 -------------

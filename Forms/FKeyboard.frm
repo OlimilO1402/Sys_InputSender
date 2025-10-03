@@ -162,6 +162,7 @@ Begin VB.Form FKeyboard
       Width           =   1815
    End
    Begin VB.Timer Timer1 
+      Enabled         =   0   'False
       Left            =   0
       Top             =   0
    End
@@ -1587,17 +1588,18 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
-Private WithEvents MWndPicker As WndPicker
-Attribute MWndPicker.VB_VarHelpID = -1
+Private WithEvents mWndPicker As WndPicker
+Attribute mWndPicker.VB_VarHelpID = -1
 Private m_WInputs As WndInputs
 Private m_InQueue As WndInputs
 Private m_AtOnce  As Boolean 'right-mouse-click started, list in queue until left-mouse-click
-Private Declare Function GetDesktopWindow Lib "user32.dll" () As LongPtr
+Private Declare Function GetDesktopWindow Lib "user32" () As LongPtr
 
 Private Sub Form_Load()
     Me.Caption = "InputSender Keyboard, Mouse, Hardware: v" & App.Major & "." & App.Minor & "." & App.Revision
     Set m_WInputs = MNew.WndInputs(Me.hwnd, GetDesktopWindow)
-    Set MWndPicker = New WndPicker: MWndPicker.New_ Timer1, BtnWndPicker
+    'Set mWndPicker = New WndPicker: mWndPicker.New_ Timer1, BtnWndPicker
+    Set mWndPicker = MNew.WndPicker(Timer1, BtnWndPicker, True)
     SetBtnKeyTooltip
 End Sub
 
@@ -1818,8 +1820,8 @@ End Sub
 'End Sub
 
 Private Sub Form_Resize()
-    Dim l As Single, T As Single, W As Single, H As Single
-    Dim B As Single: B = 2 * 8 * Screen.TwipsPerPixelX
+    Dim l As Single, t As Single, W As Single, H As Single
+    Dim b As Single: b = 2 * 8 * Screen.TwipsPerPixelX
     FraMediaKeys.Visible = ChkShowMediaKeys.Value = vbChecked
     FraBrowserKeys.Visible = ChkShowBrowserKeys.Value = vbChecked
     FraSpecialKeys.Visible = ChkShowSpecialKeys.Value = vbChecked
@@ -1827,54 +1829,57 @@ Private Sub Form_Resize()
     PnlCursorKeys.Visible = ChkShowCursorKeys.Value = vbChecked
     PnlNumpad.Visible = ChkShowNumpad.Value = vbChecked
     If FraMediaKeys.Visible Then
-        T = FraMediaKeys.Top
+        t = FraMediaKeys.Top
         W = FraMediaKeys.Width: H = FraMediaKeys.Height
-        If W > 0 And H > 0 Then FraMediaKeys.Move l, T, W, H
+        If W > 0 And H > 0 Then FraMediaKeys.Move l, t, W, H
         l = l + W
     End If
     If FraBrowserKeys.Visible Then
-        T = FraBrowserKeys.Top
+        t = FraBrowserKeys.Top
         W = FraBrowserKeys.Width: H = FraBrowserKeys.Height
-        If W > 0 And H > 0 Then FraBrowserKeys.Move l, T, W, H
+        If W > 0 And H > 0 Then FraBrowserKeys.Move l, t, W, H
         l = l + W
     End If
     If FraSpecialKeys.Visible Then
-        T = FraSpecialKeys.Top
+        t = FraSpecialKeys.Top
         W = FraSpecialKeys.Width: H = FraSpecialKeys.Height
-        If W > 0 And H > 0 Then FraSpecialKeys.Move l, T, W, H
+        If W > 0 And H > 0 Then FraSpecialKeys.Move l, t, W, H
         l = l + W
     End If
-    l = 0: T = IIf(T, T + H, FraMediaKeys.Top)
+    l = 0: t = IIf(t, t + H, FraMediaKeys.Top)
     
     W = PnlKeyboard.Width
     H = PnlKeyboard.Height
-    If W > 0 And H > 0 Then PnlKeyboard.Move l, T, W, H
-    T = 0
+    If W > 0 And H > 0 Then PnlKeyboard.Move l, t, W, H
+    t = 0
     l = PnlStandardKeys.Left
     If PnlF13F24.Visible Then
         W = PnlF13F24.Width: H = PnlF13F24.Height
-        If W > 0 And H > 0 Then PnlF13F24.Move l, T, W, H
-        T = T + H
+        If W > 0 And H > 0 Then PnlF13F24.Move l, t, W, H
+        t = t + H
     End If
     l = PnlStandardKeys.Left
     W = PnlStandardKeys.Width
     H = PnlStandardKeys.Height
-    PnlStandardKeys.Move l, T, W, H
-    l = PnlStandardKeys.Left + W + B
+    PnlStandardKeys.Move l, t, W, H
+    l = PnlStandardKeys.Left + W + b
     PnlStandardKeys.ZOrder 0
     W = 0
     If PnlCursorKeys.Visible Then
         W = PnlCursorKeys.Width
         H = PnlCursorKeys.Height
-        If W > 0 And H > 0 Then PnlCursorKeys.Move l, T, W, H
-        W = W + B
+        If W > 0 And H > 0 Then PnlCursorKeys.Move l, t, W, H
+        W = W + b
     End If
     l = l + W '+ b
     If PnlNumpad.Visible Then
         W = PnlNumpad.Width
         H = PnlNumpad.Height
-        If W > 0 And H > 0 Then PnlNumpad.Move l, T, W, H
+        If W > 0 And H > 0 Then PnlNumpad.Move l, t, W, H
     End If
+    l = TxtToStr.Left: t = TxtToStr.Top
+    W = Me.ScaleWidth - l: H = Me.ScaleHeight - t
+    If W > 0 And H > 0 Then TxtToStr.Move l, t, W, H
 End Sub
 
 

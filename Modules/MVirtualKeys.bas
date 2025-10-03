@@ -204,20 +204,22 @@ Public Enum EKeyEventFlags
 End Enum
 
 Public Enum EMouseEventFlags
-    MOUSEEVENTF_MOVE = &H1                'Movement occurred.
-    MOUSEEVENTF_LEFTDOWN = &H2            'The left button was pressed.
-    MOUSEEVENTF_LEFTUP = &H4              'The left button was released.
-    MOUSEEVENTF_RIGHTDOWN = &H8           'The right button was pressed.
-    MOUSEEVENTF_RIGHTUP = &H10            'The right button was released.
-    MOUSEEVENTF_MIDDLEDOWN = &H20         'The middle button was pressed.
-    MOUSEEVENTF_MIDDLEUP = &H40           'The middle button was released.
-    MOUSEEVENTF_XDOWN = &H80              'An X button was pressed.
-    MOUSEEVENTF_XUP = &H100               'An X button was released.
-    MOUSEEVENTF_WHEEL = &H800             'The wheel was moved, if the mouse has a wheel. The amount of movement is specified in mouseData.
-    MOUSEEVENTF_HWHEEL = &H1000           'The wheel was moved horizontally, if the mouse has a wheel. The amount of movement is specified in mouseData. Windows XP/2000: This value is not supported.
-    MOUSEEVENTF_MOVE_NOCOALESCE = &H2000  'The WM_MOUSEMOVE messages will not be coalesced. The default behavior is to coalesce WM_MOUSEMOVE messages.Windows XP/2000: This value is not supported.
-    MOUSEEVENTF_VIRTUALDESK = &H4000      'Maps coordinates to the entire desktop. Must be used with MOUSEEVENTF_ABSOLUTE.
-    MOUSEEVENTF_ABSOLUTE = &H8000         'The dx and dy members contain normalized absolute coordinates. If the flag is not set, dxand dy contain relative data (the change in position since the last reported position). This flag can be set, or not set, regardless of what kind of mouse or other pointing device, if any, is connected to the system. For further information about relative mouse motion, see the following Remarks section.
+    MOUSEEVENTF_MOVE = &H1&                ' 2^ 0 'Movement occurred.
+    MOUSEEVENTF_LEFTDOWN = &H2&            ' 2^ 1 'The left button was pressed.
+    MOUSEEVENTF_LEFTUP = &H4&              ' 2^ 2 'The left button was released.
+    MOUSEEVENTF_RIGHTDOWN = &H8&           ' 2^ 3 'The right button was pressed.
+    MOUSEEVENTF_RIGHTUP = &H10&            ' 2^ 4 'The right button was released.
+    MOUSEEVENTF_MIDDLEDOWN = &H20&         ' 2^ 5 'The middle button was pressed.
+    MOUSEEVENTF_MIDDLEUP = &H40&           ' 2^ 6 'The middle button was released.
+    MOUSEEVENTF_XDOWN = &H80&              ' 2^ 7 'An X button was pressed.
+    MOUSEEVENTF_XUP = &H100&               ' 2^ 8 'An X button was released.
+    ' 200                                  ' 2^ 9
+    ' 400                                  ' 2^10
+    MOUSEEVENTF_WHEEL = &H800&             ' 2^11 'The wheel was moved, if the mouse has a wheel. The amount of movement is specified in mouseData.
+    MOUSEEVENTF_HWHEEL = &H1000&           ' 2^12 'The wheel was moved horizontally, if the mouse has a wheel. The amount of movement is specified in mouseData. Windows XP/2000: This value is not supported.
+    MOUSEEVENTF_MOVE_NOCOALESCE = &H2000&  ' 2^13 'The WM_MOUSEMOVE messages will not be coalesced. The default behavior is to coalesce WM_MOUSEMOVE messages.Windows XP/2000: This value is not supported.
+    MOUSEEVENTF_VIRTUALDESK = &H4000&      ' 2^14 'Maps coordinates to the entire desktop. Must be used with MOUSEEVENTF_ABSOLUTE.
+    MOUSEEVENTF_ABSOLUTE = &H8000&         ' 2^15 'The dx and dy members contain normalized absolute coordinates. If the flag is not set, dxand dy contain relative data (the change in position since the last reported position). This flag can be set, or not set, regardless of what kind of mouse or other pointing device, if any, is connected to the system. For further information about relative mouse motion, see the following Remarks section.
 End Enum
 Private m_VKeyNmInit  As Boolean
 Private m_VKeyNames() As String
@@ -706,6 +708,12 @@ End Property
 ' ^ ' ############################## ' ^ '     EKeyEventFlags      ' ^ ' ############################## ' ^ '
 
 ' v ' ############################## ' v '    EMouseEventFlags     ' v ' ############################## ' v '
+
+Public Function EMouseEventFlags_ToHex(ByVal e As EMouseEventFlags) As String
+    Dim s As String: s = Hex(e)
+    EMouseEventFlags_ToHex = "&&H" & s & "&&"
+End Function
+
 Public Function EMouseEventFlags_ToStr(ByVal e As EMouseEventFlags) As String
     Dim s As String, sOr As String: sOr = "Or "
     If e And EMouseEventFlags.MOUSEEVENTF_MOVE Then s = s & IIf(Len(s), sOr, "") & "MOVE "
@@ -747,8 +755,8 @@ End Function
 Public Sub EMouseEventFlags_ToList(aLst)
     aLst.Clear
     Dim i As Long, s As String
-    s = EMouseEventFlags_ToStr(i): If Len(s) Then aLst.AddItem s
-    For i = 0 To 14
+    's = EMouseEventFlags_ToStr(i): If Len(s) Then aLst.AddItem s '???
+    For i = 0 To 15
         s = EMouseEventFlags_ToStr(2 ^ i): If Len(s) Then aLst.AddItem s
     Next
 End Sub
@@ -776,5 +784,28 @@ Public Property Let ListBox_EMouseEventFlags(this As ListBox, ByVal e As EMouseE
     Next
 End Property
 
+Public Function ScreenCoords_ToMouseInpCoords(ByVal X_pix As Long, ByVal Y_pix As Long, MouseInp_X_out As Long, MouseInp_Y_out As Long) As Boolean
+Try: On Error GoTo Catch
+    Dim Res_W As Double: Res_W = Screen.Width / Screen.TwipsPerPixelX  ' 2560
+    Dim Res_H As Double: Res_H = Screen.Height / Screen.TwipsPerPixelY ' 1440
+    MouseInp_X_out = X_pix * 65535# / Res_W
+    MouseInp_Y_out = Y_pix * 65535# / Res_H
+    'Debug.Print MouseInp_X_out & "; " & MouseInp_Y_out
+    ScreenCoords_ToMouseInpCoords = True
+    Exit Function
+Catch:
+End Function
+
+Public Function MouseInpCoords_ToScreenCoords(ByVal MouseInp_X As Long, ByVal MouseInp_Y As Long, X_pix_out As Long, Y_pix_out As Long)
+Try: On Error GoTo Catch
+    Dim Res_W As Double: Res_W = Screen.Width / Screen.TwipsPerPixelX  ' 2560
+    Dim Res_H As Double: Res_H = Screen.Height / Screen.TwipsPerPixelY ' 1440
+    X_pix_out = MouseInp_X * Res_W / 65535#
+    Y_pix_out = MouseInp_Y * Res_H / 65535#
+    'Debug.Print X_pix_out & "; " & Y_pix_out
+    MouseInpCoords_ToScreenCoords = True
+    Exit Function
+Catch:
+End Function
 ' ^ ' ############################## ' ^ '    EMouseEventFlags     ' ^ ' ############################## ' ^ '
 

@@ -1,8 +1,8 @@
 Attribute VB_Name = "MNew"
 Option Explicit
 
-Public Function WndPicker(aTimer As Timer, aButton As CommandButton) As WndPicker
-    Set WndPicker = New WndPicker: WndPicker.New_ aTimer, aButton
+Public Function WndPicker(aTimer As Timer, aButton As CommandButton, ByVal bDrawFocusRect As Boolean) As WndPicker
+    Set WndPicker = New WndPicker: WndPicker.New_ aTimer, aButton, bDrawFocusRect
 End Function
 
 Public Function WndInputs(ByVal hWndSender As LongPtr, ByVal hWndReceiver As LongPtr) As WndInputs
