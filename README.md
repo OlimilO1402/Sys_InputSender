@@ -12,7 +12,7 @@ Project started in 2008.
 
 What is it
 ----------
-This project shows how to use the Windows-API function [SendInput](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendinput) for sending keystrokes or mouseevents to the active window. 
+This project shows how to use the Windows-API function [SendInput](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendinput) for sending keystrokes to the active window or mouseevents to the screen. 
 It uses an array of [INPUT](https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-input) structure, which is basically a union made of 3 different structures:
 * [MOUSEINPUT](https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-mouseinput)
 * [KEYBDINPUT](https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-keybdinput)
