@@ -68,7 +68,7 @@ Begin VB.Form FKeyboard
       Height          =   495
       Left            =   15360
       TabIndex        =   163
-      ToolTipText     =   "Clone the selected object"
+      ToolTipText     =   "Delete the selected object"
       Top             =   960
       Width           =   495
    End
@@ -1696,8 +1696,36 @@ Private Sub BtnMoveDown_Click()
     UpdateView
     LstWndInputs.ListIndex = i + 1
 End Sub
+
+Function GetTimeStamp() As Long
+    Dim t: t = Time
+    'Dim lt As Long: lt = Time
+    'Dim st As Single: st = Time
+    'Debug.Print t & " " & lt & " " & st
+    Dim h As Long: h = Hour(t)
+    Dim m As Long: m = Minute(t)
+    Dim s As Long: s = Second(t)
+    Dim ms As Long: ms = s * 1000 + m * 60 * 1000 + h * 3600 * 1000
+    GetTimeStamp = ms
+    'Debug.Print ms
+    'Dim ts As Long
+    'ts =
+End Function
+
 Private Sub BtnSend_Click()
+    'GetTimeStamp
+    m_WInputs.DebugPrintTimestamps
+    Debug.Print "--------"
+    Dim ts As Long: ts = GetTimeStamp
+    m_WInputs.AddTimeStamp ts
+    m_WInputs.DebugPrintTimestamps
+    Debug.Print "--------"
     m_WInputs.Send
+    m_WInputs.DelTimeStamp
+    m_WInputs.DebugPrintTimestamps
+    Debug.Print "--------"
+    'Dim ts As Long
+    'ts = m_WInputs.TimeStamps
 End Sub
 
 Public Sub UpdateView()
@@ -1745,7 +1773,7 @@ Private Sub mnuFileSaveAs_Click()
 End Sub
 
 Private Sub mnuHelpInfo_Click()
-    MsgBox App.CompanyName & " " & App.ProductName & " " & App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision & vbCrLf & App.FileDescription
+    MsgBox App.CompanyName & " " & App.ProductName & " " & App.EXEName & " v" & App.Major & "." & App.Minor & "." & App.Revision & vbCrLf & App.FileDescription, vbInformation
 End Sub
 
 Private Sub mWndPicker_Found(ByVal aHWnd As LongPtr, ByVal WndCaption As String)
@@ -1820,7 +1848,7 @@ End Sub
 'End Sub
 
 Private Sub Form_Resize()
-    Dim l As Single, t As Single, W As Single, H As Single
+    Dim l As Single, t As Single, W As Single, h As Single
     Dim b As Single: b = 2 * 8 * Screen.TwipsPerPixelX
     FraMediaKeys.Visible = ChkShowMediaKeys.Value = vbChecked
     FraBrowserKeys.Visible = ChkShowBrowserKeys.Value = vbChecked
@@ -1830,56 +1858,56 @@ Private Sub Form_Resize()
     PnlNumpad.Visible = ChkShowNumpad.Value = vbChecked
     If FraMediaKeys.Visible Then
         t = FraMediaKeys.Top
-        W = FraMediaKeys.Width: H = FraMediaKeys.Height
-        If W > 0 And H > 0 Then FraMediaKeys.Move l, t, W, H
+        W = FraMediaKeys.Width: h = FraMediaKeys.Height
+        If W > 0 And h > 0 Then FraMediaKeys.Move l, t, W, h
         l = l + W
     End If
     If FraBrowserKeys.Visible Then
         t = FraBrowserKeys.Top
-        W = FraBrowserKeys.Width: H = FraBrowserKeys.Height
-        If W > 0 And H > 0 Then FraBrowserKeys.Move l, t, W, H
+        W = FraBrowserKeys.Width: h = FraBrowserKeys.Height
+        If W > 0 And h > 0 Then FraBrowserKeys.Move l, t, W, h
         l = l + W
     End If
     If FraSpecialKeys.Visible Then
         t = FraSpecialKeys.Top
-        W = FraSpecialKeys.Width: H = FraSpecialKeys.Height
-        If W > 0 And H > 0 Then FraSpecialKeys.Move l, t, W, H
+        W = FraSpecialKeys.Width: h = FraSpecialKeys.Height
+        If W > 0 And h > 0 Then FraSpecialKeys.Move l, t, W, h
         l = l + W
     End If
-    l = 0: t = IIf(t, t + H, FraMediaKeys.Top)
+    l = 0: t = IIf(t, t + h, FraMediaKeys.Top)
     
     W = PnlKeyboard.Width
-    H = PnlKeyboard.Height
-    If W > 0 And H > 0 Then PnlKeyboard.Move l, t, W, H
+    h = PnlKeyboard.Height
+    If W > 0 And h > 0 Then PnlKeyboard.Move l, t, W, h
     t = 0
     l = PnlStandardKeys.Left
     If PnlF13F24.Visible Then
-        W = PnlF13F24.Width: H = PnlF13F24.Height
-        If W > 0 And H > 0 Then PnlF13F24.Move l, t, W, H
-        t = t + H
+        W = PnlF13F24.Width: h = PnlF13F24.Height
+        If W > 0 And h > 0 Then PnlF13F24.Move l, t, W, h
+        t = t + h
     End If
     l = PnlStandardKeys.Left
     W = PnlStandardKeys.Width
-    H = PnlStandardKeys.Height
-    PnlStandardKeys.Move l, t, W, H
+    h = PnlStandardKeys.Height
+    PnlStandardKeys.Move l, t, W, h
     l = PnlStandardKeys.Left + W + b
     PnlStandardKeys.ZOrder 0
     W = 0
     If PnlCursorKeys.Visible Then
         W = PnlCursorKeys.Width
-        H = PnlCursorKeys.Height
-        If W > 0 And H > 0 Then PnlCursorKeys.Move l, t, W, H
+        h = PnlCursorKeys.Height
+        If W > 0 And h > 0 Then PnlCursorKeys.Move l, t, W, h
         W = W + b
     End If
     l = l + W '+ b
     If PnlNumpad.Visible Then
         W = PnlNumpad.Width
-        H = PnlNumpad.Height
-        If W > 0 And H > 0 Then PnlNumpad.Move l, t, W, H
+        h = PnlNumpad.Height
+        If W > 0 And h > 0 Then PnlNumpad.Move l, t, W, h
     End If
     l = TxtToStr.Left: t = TxtToStr.Top
-    W = Me.ScaleWidth - l: H = Me.ScaleHeight - t
-    If W > 0 And H > 0 Then TxtToStr.Move l, t, W, H
+    W = Me.ScaleWidth - l: h = Me.ScaleHeight - t
+    If W > 0 And h > 0 Then TxtToStr.Move l, t, W, h
 End Sub
 
 

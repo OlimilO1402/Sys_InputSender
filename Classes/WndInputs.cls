@@ -12,7 +12,7 @@ Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-
+Implements IWndInputSender
 'https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-mouseinput
 'Private Type MOUSEINPUT
 '    dwType      As EInputType
@@ -59,14 +59,14 @@ End Enum
 '  } DUMMYUNIONNAME;
 '} INPUT, *PINPUT, *LPINPUT;
 Private Type HKMINPUT
-    dwType As EInputType
-    Value1 As Long
-    Value2 As Long
-    Value3 As Long
-    Value4 As Long
-    Value5 As Long
-    Value6 As LongPtr
-End Type
+    dwType As EInputType ' 4
+    Value1 As Long       ' 4
+    Value2 As Long       ' 4
+    Value3 As Long       ' 4
+    Value4 As Long       ' 4
+    Value5 As Long       ' 4
+    Value6 As LongPtr    ' 4-8
+End Type           ' Sum:
 'https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-input
 'Private Type IINPUT
 '    INPUT  As HKMINPUT
@@ -96,28 +96,60 @@ Private Declare Function GetLastInputInfo Lib "user32" (plii As Any) As Long
 Private Declare Function SetForegroundWindow Lib "user32.dll" (ByVal hwnd As LongPtr) As Long
 Private m_hWndSender   As LongPtr 'hwnd of window FMain in this app
 Private m_hWndReceiver As LongPtr 'hwnd of any window to send inputs to
-Private m_Date  As Date
+'Private m_Date  As Date '???
 Private m_Count As Long
 Private m_Arr() As HKMINPUT 'IINPUT
+'Private m_TimeStamp As Long
+Private m_Name  As String
 
 Private Sub Class_Initialize()
     ReDim m_Arr(0 To 3)
 End Sub
 
-Friend Sub New_(hWndSender As LongPtr, hWndReceiver As LongPtr)
- m_hWndSender = hWndSender:          m_hWndReceiver = hWndReceiver
+Friend Sub New_(Name As String, hWndSender As LongPtr, hWndReceiver As LongPtr)
+ m_Name = Name:  m_hWndSender = hWndSender:          m_hWndReceiver = hWndReceiver:
 End Sub
 
 'Copy to MNew:
-'Public Function WndInputs(ByVal hWndSender As LongPtr, ByVal hWndReceiver As LongPtr) As WndInputs
+'Public Function WndInputs(ByVal hWndSender As LongPtr, ByVal hWndReceiver As LongPtr, ByVal Name As String) As WndInputs
 '    Set WndInputs = New WndInputs: WndInputs.New_ hWndSender, ByVal hWndReceiver
 'End Function
+
+Friend Sub NewC(other As WndInputs)
+    With other
+        New_ .Name, .hWndSender, .hWndReceiver
+        m_Count = .Count: EnsureCapacity m_Count
+        RtlMoveMemory ByVal Me.DataPtr, ByVal .DataPtr, m_Count * (24 + MPtr.SizeOf_LongPtr)
+    End With
+End Sub
+
+Public Function Clone() As WndInputs
+    Set Clone = New WndInputs: Clone.NewC Me
+End Function
+
 Public Sub Clear()
     Class_Initialize
     m_Count = 0
 End Sub
+
+Public Property Get DataPtr() As LongPtr
+    DataPtr = VarPtr(m_Arr(0))
+End Property
+
 Public Property Get Count() As Long
     Count = m_Count
+End Property
+
+Public Property Get hWndSender() As LongPtr
+    hWndSender = m_hWndSender
+End Property
+
+Public Property Get hWndReceiver() As LongPtr
+    hWndReceiver = m_hWndReceiver
+End Property
+
+Public Property Get Name() As String
+    Name = m_Name
 End Property
 
 Function GetNextCapacity(ByVal Count As Long) As Long
@@ -160,6 +192,44 @@ Public Property Get InputType(ByVal Index As Long) As EInputType
     If Index < 0 Or m_Count <= Index Then Exit Property
     InputType = m_Arr(Index).dwType
 End Property
+
+'Public Property Get TimeStamp(ByVal Index As Long) As Long
+'    'If Index < 0 Or m_Count <= Index Then Exit Property
+'    Select Case Me.InputType(Index)
+'    Case EInputType.INPUT_KEYBOARD: TimeStamp = m_Arr(Index).Value3
+'    Case EInputType.INPUT_MOUSE:    TimeStamp = m_Arr(Index).Value5
+'    End Select
+'End Property
+'Public Property Let TimeStamp(ByVal Index As Long, ByVal Value As Long)
+'    'If Index < 0 Or m_Count <= Index Then Exit Property
+'    Select Case Me.InputType(Index)
+'    Case EInputType.INPUT_KEYBOARD: m_Arr(Index).Value3 = Value
+'    Case EInputType.INPUT_MOUSE:    m_Arr(Index).Value5 = Value
+'    End Select
+'End Property
+'
+'Public Sub AddTimeStamp(ByVal ts As Long)
+'    m_TimeStamp = ts
+'    Dim i As Long
+'    For i = 0 To m_Count - 1
+'        TimeStamp(i) = TimeStamp(i) + m_TimeStamp
+'    Next
+'End Sub
+'
+'Public Sub DelTimeStamp()
+'    Dim i As Long
+'    For i = 0 To m_Count - 1
+'        TimeStamp(i) = TimeStamp(i) - m_TimeStamp
+'    Next
+'    m_TimeStamp = 0
+'End Sub
+'
+'Public Sub DebugPrintTimestamps()
+'    Dim i As Long
+'    For i = 0 To m_Count - 1
+'        Debug.Print TimeStamp(i)
+'    Next
+'End Sub
 
 Public Property Get IsEmpty() As Boolean
     IsEmpty = m_Count = 0
@@ -290,4 +360,7 @@ Catch: MsgBox Err.Number & " " & Err.Description
 Finally: Close FNr
 End Sub
 
-
+' v ' ############################## ' v '    Implements IWndInputSender    ' v ' ############################## ' v '
+Private Sub IWndInputSender_Send()
+    Me.Send
+End Sub

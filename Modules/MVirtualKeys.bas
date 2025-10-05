@@ -424,6 +424,11 @@ Public Function EVirtualKeyCodes_ToStr(ByVal e As EVirtualKeyCodes) As String
     EVirtualKeyCodes_ToStr = s
 End Function
 
+Public Function EVirtualKeyCodes_Contains(ByVal Value As Long) As Boolean
+    Dim s As String: s = EVirtualKeyCodes_ToStr(Value)
+    EVirtualKeyCodes_Contains = Len(s)
+End Function
+
 Public Sub EVirtualKeyCodes_ToList(aCmb As ComboBox)
     aCmb.Clear
     Dim i As Long, s As String
@@ -790,20 +795,54 @@ Try: On Error GoTo Catch
     Dim Res_H As Double: Res_H = Screen.Height / Screen.TwipsPerPixelY ' 1440
     MouseInp_X_out = X_pix * 65535# / Res_W
     MouseInp_Y_out = Y_pix * 65535# / Res_H
-    'Debug.Print MouseInp_X_out & "; " & MouseInp_Y_out
     ScreenCoords_ToMouseInpCoords = True
     Exit Function
 Catch:
 End Function
 
-Public Function MouseInpCoords_ToScreenCoords(ByVal MouseInp_X As Long, ByVal MouseInp_Y As Long, X_pix_out As Long, Y_pix_out As Long)
+Public Function ScreenX_ToMouseInpX(ByVal X_pix As Long, MouseInp_X_out As Long) As Boolean
+Try: On Error GoTo Catch
+    Dim Res_W As Double: Res_W = Screen.Width / Screen.TwipsPerPixelX  ' 2560
+    MouseInp_X_out = X_pix * 65535# / Res_W
+    ScreenX_ToMouseInpX = True
+    Exit Function
+Catch:
+End Function
+
+Public Function ScreenY_ToMouseInpY(ByVal Y_pix As Long, MouseInp_Y_out As Long) As Boolean
+Try: On Error GoTo Catch
+    Dim Res_H As Double: Res_H = Screen.Height / Screen.TwipsPerPixelY  ' 1440
+    MouseInp_Y_out = Y_pix * 65535# / Res_H
+    ScreenY_ToMouseInpY = True
+    Exit Function
+Catch:
+End Function
+
+Public Function MouseInpCoords_ToScreenCoords(ByVal MouseInp_X As Long, ByVal MouseInp_Y As Long, X_pix_out As Long, Y_pix_out As Long) As Boolean
 Try: On Error GoTo Catch
     Dim Res_W As Double: Res_W = Screen.Width / Screen.TwipsPerPixelX  ' 2560
     Dim Res_H As Double: Res_H = Screen.Height / Screen.TwipsPerPixelY ' 1440
     X_pix_out = MouseInp_X * Res_W / 65535#
     Y_pix_out = MouseInp_Y * Res_H / 65535#
-    'Debug.Print X_pix_out & "; " & Y_pix_out
     MouseInpCoords_ToScreenCoords = True
+    Exit Function
+Catch:
+End Function
+
+Public Function MouseInpX_ToScreenX(ByVal MouseInp_X As Long, X_pix_out As Long) As Boolean
+Try: On Error GoTo Catch
+    Dim Res_W As Double: Res_W = Screen.Width / Screen.TwipsPerPixelX  ' 2560
+    X_pix_out = MouseInp_X * Res_W / 65535#
+    MouseInpX_ToScreenX = True
+    Exit Function
+Catch:
+End Function
+
+Public Function MouseInpY_ToScreenY(ByVal MouseInp_Y As Long, Y_pix_out As Long) As Boolean
+Try: On Error GoTo Catch
+    Dim Res_H As Double: Res_H = Screen.Height / Screen.TwipsPerPixelY ' 1440
+    Y_pix_out = MouseInp_Y * Res_H / 65535#
+    MouseInpY_ToScreenY = True
     Exit Function
 Catch:
 End Function

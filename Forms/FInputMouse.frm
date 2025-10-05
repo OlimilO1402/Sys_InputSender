@@ -26,14 +26,14 @@ Begin VB.Form FInputMouse
       Caption         =   "MouseInput-Coordinates"
       Height          =   1215
       Left            =   120
-      TabIndex        =   8
+      TabIndex        =   0
       Top             =   120
       Width           =   2655
       Begin VB.TextBox TxtXdX 
          Alignment       =   2  'Zentriert
          Height          =   375
          Left            =   960
-         TabIndex        =   10
+         TabIndex        =   2
          Top             =   360
          Width           =   1575
       End
@@ -41,7 +41,7 @@ Begin VB.Form FInputMouse
          Alignment       =   2  'Zentriert
          Height          =   375
          Left            =   960
-         TabIndex        =   9
+         TabIndex        =   3
          Top             =   720
          Width           =   1575
       End
@@ -50,7 +50,7 @@ Begin VB.Form FInputMouse
          Caption         =   "Y | dy:"
          Height          =   255
          Left            =   240
-         TabIndex        =   12
+         TabIndex        =   18
          Top             =   720
          Width           =   525
       End
@@ -59,7 +59,7 @@ Begin VB.Form FInputMouse
          Caption         =   "X | dx:"
          Height          =   255
          Left            =   240
-         TabIndex        =   11
+         TabIndex        =   1
          Top             =   360
          Width           =   540
       End
@@ -73,14 +73,14 @@ Begin VB.Form FInputMouse
       Caption         =   "Screen-Coordinates"
       Height          =   1215
       Left            =   2880
-      TabIndex        =   13
+      TabIndex        =   4
       Top             =   120
       Width           =   4335
       Begin VB.CommandButton BtnGetScreenCoords 
          Caption         =   "Get Screen- Coordinates"
          Height          =   735
          Left            =   2640
-         TabIndex        =   18
+         TabIndex        =   9
          Top             =   360
          Width           =   1575
       End
@@ -88,7 +88,7 @@ Begin VB.Form FInputMouse
          Alignment       =   2  'Zentriert
          Height          =   375
          Left            =   960
-         TabIndex        =   15
+         TabIndex        =   6
          Top             =   360
          Width           =   1575
       End
@@ -96,7 +96,7 @@ Begin VB.Form FInputMouse
          Alignment       =   2  'Zentriert
          Height          =   375
          Left            =   960
-         TabIndex        =   14
+         TabIndex        =   8
          Top             =   720
          Width           =   1575
       End
@@ -105,7 +105,7 @@ Begin VB.Form FInputMouse
          Caption         =   "Y | dy:"
          Height          =   255
          Left            =   240
-         TabIndex        =   17
+         TabIndex        =   7
          Top             =   720
          Width           =   525
       End
@@ -114,7 +114,7 @@ Begin VB.Form FInputMouse
          Caption         =   "X | dx:"
          Height          =   255
          Left            =   240
-         TabIndex        =   16
+         TabIndex        =   5
          Top             =   360
          Width           =   540
       End
@@ -123,7 +123,7 @@ Begin VB.Form FInputMouse
       Alignment       =   2  'Zentriert
       Height          =   375
       Left            =   4680
-      TabIndex        =   1
+      TabIndex        =   12
       Top             =   1440
       Width           =   2535
    End
@@ -132,7 +132,7 @@ Begin VB.Form FInputMouse
       Default         =   -1  'True
       Height          =   375
       Left            =   2880
-      TabIndex        =   5
+      TabIndex        =   16
       Top             =   5040
       Width           =   1335
    End
@@ -141,15 +141,16 @@ Begin VB.Form FInputMouse
       Caption         =   "Cancel"
       Height          =   375
       Left            =   4440
-      TabIndex        =   6
+      TabIndex        =   17
       Top             =   5040
       Width           =   1335
    End
    Begin VB.TextBox TxtTime 
       Alignment       =   2  'Zentriert
+      Enabled         =   0   'False
       Height          =   375
       Left            =   4680
-      TabIndex        =   4
+      TabIndex        =   14
       Top             =   1920
       Width           =   2535
    End
@@ -157,7 +158,7 @@ Begin VB.Form FInputMouse
       Height          =   4050
       Left            =   120
       Style           =   1  'Kontrollkästchen
-      TabIndex        =   2
+      TabIndex        =   10
       Top             =   1440
       Width           =   2655
    End
@@ -165,7 +166,7 @@ Begin VB.Form FInputMouse
       Caption         =   "Flags:"
       Height          =   2295
       Left            =   3000
-      TabIndex        =   7
+      TabIndex        =   15
       Top             =   2400
       Width           =   4215
    End
@@ -174,16 +175,17 @@ Begin VB.Form FInputMouse
       Caption         =   "MouseData:"
       Height          =   255
       Left            =   3000
-      TabIndex        =   0
+      TabIndex        =   11
       Top             =   1440
       Width           =   1290
    End
    Begin VB.Label Label4 
       AutoSize        =   -1  'True
       Caption         =   "Timestamp:"
+      Enabled         =   0   'False
       Height          =   255
       Left            =   3000
-      TabIndex        =   3
+      TabIndex        =   13
       Top             =   1920
       Width           =   1245
    End
@@ -267,6 +269,36 @@ Private Sub mWndPicker_ScreenCoordinates(ByVal X As Long, Y As Long)
                 TxtScrXdX.Text = Scr_X
                 TxtScrYdY.Text = Scr_Y
             End If
+        End With
+    End If
+End Sub
+
+Private Sub TxtXdX_LostFocus()
+    Dim Mi_X As Long: Mi_X = TxtXdX.Text
+    Dim X_pix As Long
+    If MVirtualKeys.MouseInpX_ToScreenX(Mi_X, X_pix) Then
+        TxtScrXdX.Text = X_pix
+    End If
+End Sub
+
+Private Sub TxtScrXdX_LostFocus()
+    Dim X_pix As Long: X_pix = TxtScrXdX.Text
+    Dim Mi_X As Long
+    If MVirtualKeys.ScreenX_ToMouseInpX(X_pix, Mi_X) Then
+        With m_Object
+            .dX = Mi_X
+            TxtXdX.Text = .dX
+        End With
+    End If
+End Sub
+
+Private Sub TxtScrYdY_LostFocus()
+    Dim Y_pix As Long: Y_pix = TxtScrYdY.Text
+    Dim Mi_Y As Long
+    If MVirtualKeys.ScreenY_ToMouseInpY(Y_pix, Mi_Y) Then
+        With m_Object
+            .dY = Mi_Y
+            TxtYdY.Text = .dY
         End With
     End If
 End Sub

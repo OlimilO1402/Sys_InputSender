@@ -5,8 +5,8 @@ Public Function WndPicker(aTimer As Timer, aButton As CommandButton, ByVal bDraw
     Set WndPicker = New WndPicker: WndPicker.New_ aTimer, aButton, bDrawFocusRect
 End Function
 
-Public Function WndInputs(ByVal hWndSender As LongPtr, ByVal hWndReceiver As LongPtr) As WndInputs
-    Set WndInputs = New WndInputs: WndInputs.New_ hWndSender, hWndReceiver
+Public Function WndInputs(ByVal hWndSender As LongPtr, ByVal hWndReceiver As LongPtr, ByVal Name As String) As WndInputs
+    Set WndInputs = New WndInputs: WndInputs.New_ hWndSender, hWndReceiver, Name
 End Function
 
 Public Function WndInputMouse(ByVal dX As Long, ByVal dY As Long, ByVal MouseData As Long, ByVal Flags As Long, ByVal aTime As Long) As WndInputMouse
@@ -21,3 +21,6 @@ Public Function WndInputHardw(ByVal aMessage As Long, ByVal WParamL As Integer, 
     Set WndInputHardw = New WndInputHardw: WndInputHardw.New_ aMessage, WParamL, WParamH
 End Function
 
+Public Function WndInputDelay(ByVal Milliseconds As Long) As WndInputDelay
+    Set WndInputDelay = New WndInputDelay: WndInputDelay.New_ Milliseconds
+End Function

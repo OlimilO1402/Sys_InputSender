@@ -15,11 +15,11 @@ Option Explicit
 
 'https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-keybdinput
 Private Type KEYBDINPUT
-    dwType      As EInputType      ' 4
-    wVk         As Integer         ' 2
-    wScan       As Integer         ' 2
-    dwFlags     As EKeyEventFlags  ' 4
-    Time        As Long            ' 4
+    dwType      As EInputType      ' 4  '
+    wVk         As Integer         ' 2  ' 1
+    wScan       As Integer         ' 2  ' 1
+    dwFlags     As EKeyEventFlags  ' 4  ' 2
+    Time        As Long            ' 4  ' 3
     dwExtraInfo As LongPtr         ' 4/8
 End Type                     ' Sum: 20
 

@@ -1,5 +1,6 @@
 Attribute VB_Name = "MApp"
 Option Explicit
+Public Declare Function GetDesktopWindow Lib "user32" () As LongPtr
 
 Sub Main()
     FKeyboard.Show
