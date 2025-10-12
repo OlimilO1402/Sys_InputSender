@@ -92,8 +92,14 @@ Private Declare Function SendInput Lib "user32" (ByVal cInputs As Long, pInputs 
 Private Declare Function GetLastInputInfo Lib "user32" (plii As Any) As Long
 'Remarks: This function is useful for input idle detection. For more information on tick counts, see GetTickCount.
 
+'https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-gettickcount
+'Retrieves the number of milliseconds that have elapsed since the system was started.
+Private Declare Function GetTickCount Lib "kernel32" () As Long
+'https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-gettickcount64
+Private Declare Function GetTickCount64 Lib "kernel32" () As Currency
+
 'https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow
-Private Declare Function SetForegroundWindow Lib "user32.dll" (ByVal hwnd As LongPtr) As Long
+Private Declare Function SetForegroundWindow Lib "user32.dll" (ByVal hWnd As LongPtr) As Long
 Private m_hWndSender   As LongPtr 'hwnd of window FMain in this app
 Private m_hWndReceiver As LongPtr 'hwnd of any window to send inputs to
 'Private m_Date  As Date '???

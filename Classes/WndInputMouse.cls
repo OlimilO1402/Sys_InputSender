@@ -12,13 +12,14 @@ Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
+Implements IWndInputSender
 
 'https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-mouseinput
 Private Type MOUSEINPUT
     dwType      As EInputType      ' 4
-    dX          As Long            ' 4 ' 1 ' and dY: The absolute position of the mouse, or the amount of motion since the last mouse event was generated, depending on the value of the dwFlags member.
+    dx          As Long            ' 4 ' 1 ' and dY: The absolute position of the mouse, or the amount of motion since the last mouse event was generated, depending on the value of the dwFlags member.
                                            '         Absolute data is specified as the x coordinate of the mouse; relative data is specified as the number of pixels moved.
-    dY          As Long            ' 4 ' 2
+    dy          As Long            ' 4 ' 2
     
     MouseData   As Long            ' 4 ' 3 ' If dwFlags contains MOUSEEVENTF_WHEEL, then mouseData specifies the amount of wheel movement.
                                            ' A positive value indicates that the wheel was rotated forward, away from the user;
@@ -40,13 +41,17 @@ Private Type MOUSEINPUT
                                            ' require use of the mouseData field.
                                        
     Time        As Long            ' 4 ' 5
-    dwExtraInfo As LongPtr         ' 4/8
+    dwExtraInfo As LongPtr         ' 4/8   ' ULONG_PTR the dw-prefix is misleading, the type is pointer-type
+                                           ' An additional value associated with the mouse event. An application calls GetMessageExtraInfo to obtain this extra information.
 End Type                     ' Sum: 28 resp 32
 
 Private Type PMOUSEINPUT
     SAPtr As TUDTPtr
-    Arr() As MOUSEINPUT
+    arr() As MOUSEINPUT
 End Type
+
+'https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mouse_event
+Private Declare Sub mouse_event Lib "user32" (ByVal dwFlags As Long, ByVal dx As Long, ByVal dy As Long, ByVal cButtons As Long, ByVal dwExtraInfo As LongPtr)
 
 Private m_Value As PMOUSEINPUT
 Private m_Data  As MOUSEINPUT
@@ -54,15 +59,15 @@ Private m_Data  As MOUSEINPUT
 Private Sub Class_Initialize()
     m_Data.dwType = EInputType.INPUT_MOUSE
     MPtr.New_UDTPtr m_Value.SAPtr, FADF_AUTO Or FADF_FIXEDSIZE Or FADF_RECORD, 28
-    MPtr.SAPtr(ArrPtr(m_Value.Arr)) = m_Value.SAPtr.pSA
+    MPtr.SAPtr(ArrPtr(m_Value.arr)) = m_Value.SAPtr.pSA
     m_Value.SAPtr.pvData = VarPtr(m_Data)
 End Sub
 
 Private Sub Class_Terminate()
-    MPtr.ZeroSAPtr ArrPtr(m_Value.Arr)
+    MPtr.ZeroSAPtr ArrPtr(m_Value.arr)
 End Sub
-Friend Sub New_(dX As Long, dY As Long, MouseData As Long, Flags As Long, aTime As Long)
-    With Me: .dX = dX: .dY = dY: .MouseData = MouseData: .Flags = Flags: .Time = aTime: End With
+Friend Sub New_(dx As Long, dy As Long, MouseData As Long, Flags As Long, aTime As Long)
+    With Me: .dx = dx: .dy = dy: .MouseData = MouseData: .Flags = Flags: .Time = aTime: End With
 End Sub
 'Copy to MNew:
 'Public Function WndInputMouse(ByVal pData As LongPtr, ByVal dX As Long, ByVal dY As Long, ByVal MouseData As Long, ByVal Flags As Long, ByVal aTime As Long) As WndInputMouse
@@ -70,14 +75,14 @@ End Sub
 'End Function
 
 Friend Sub NewC(other As WndInputMouse)
-    With other: Me.New_ .dX, .dY, .MouseData, .Flags, .Time: End With
+    With other: Me.New_ .dx, .dy, .MouseData, .Flags, .Time: End With
 End Sub
 Public Function Clone() As WndInputMouse
     Set Clone = New WndInputMouse: Clone.NewC Me
 End Function
 
 Public Property Get Key() As String
-    Key = "Mi: " & Me.dX & " " & Me.dY
+    Key = "Mi: " & Me.dx & " " & Me.dy
 End Property
 
 Public Property Get Ptr() As LongPtr
@@ -88,24 +93,24 @@ Public Property Let Ptr(ByVal Value As LongPtr)
 End Property
 
 Public Sub SetData()
-    m_Value.Arr(0) = m_Data
+    m_Value.arr(0) = m_Data
 End Sub
 
 'dx-dy:
 'The absolute position of the mouse, or the amount of motion since the last mouse event was generated, depending on the value of the
 'dwFlags member. Absolute data is specified as the x coordinate of the mouse; relative data is specified as the number of pixels moved.
-Public Property Get dX() As Long
-    dX = m_Value.Arr(0).dX
+Public Property Get dx() As Long
+    dx = m_Value.arr(0).dx
 End Property
-Public Property Let dX(ByVal Value As Long)
-    m_Value.Arr(0).dX = Value
+Public Property Let dx(ByVal Value As Long)
+    m_Value.arr(0).dx = Value
 End Property
 
-Public Property Get dY() As Long
-    dY = m_Value.Arr(0).dY
+Public Property Get dy() As Long
+    dy = m_Value.arr(0).dy
 End Property
-Public Property Let dY(ByVal Value As Long)
-    m_Value.Arr(0).dY = Value
+Public Property Let dy(ByVal Value As Long)
+    m_Value.arr(0).dy = Value
 End Property
 
 'If dwFlags contains MOUSEEVENTF_WHEEL, then mouseData specifies the amount of wheel movement.
@@ -118,10 +123,10 @@ End Property
 'XBUTTON1 = &H0001  'Set if the first X button is pressed or released.
 'XBUTTON2 = &H0002  'Set if the second X button is pressed or released.
 Public Property Get MouseData() As Long
-    MouseData = m_Value.Arr(0).MouseData
+    MouseData = m_Value.arr(0).MouseData
 End Property
 Public Property Let MouseData(ByVal Value As Long)
-    m_Value.Arr(0).MouseData = Value
+    m_Value.arr(0).MouseData = Value
 End Property
 
 'A set of bit flags that specify various aspects of mouse motion and button clicks.
@@ -132,33 +137,33 @@ End Property
 'You cannot specify both the MOUSEEVENTF_WHEEL flag and either MOUSEEVENTF_XDOWN or MOUSEEVENTF_XUP flags simultaneously
 'in the dwFlags parameter, because they both require use of the mouseData field.
 Public Property Get Flags() As EMouseEventFlags
-    Flags = m_Value.Arr(0).dwFlags
+    Flags = m_Value.arr(0).dwFlags
 End Property
 Public Property Let Flags(ByVal Value As EMouseEventFlags)
-    m_Value.Arr(0).dwFlags = Value
+    m_Value.arr(0).dwFlags = Value
 End Property
 
 'The time stamp for the event, in milliseconds. If this parameter is 0, the system will provide its own time stamp.
 Public Property Get Time() As Long
-    Time = m_Value.Arr(0).Time
+    Time = m_Value.arr(0).Time
 End Property
 Public Property Let Time(ByVal Value As Long)
-    m_Value.Arr(0).Time = Value
+    m_Value.arr(0).Time = Value
 End Property
 
 'An additional value associated with the keystroke. Use the GetMessageExtraInfo function to obtain this information.
 Public Property Get ExtraInfo() As LongPtr
-    ExtraInfo = m_Value.Arr(0).dwExtraInfo
+    ExtraInfo = m_Value.arr(0).dwExtraInfo
 End Property
 Public Property Let ExtraInfo(ByVal Value As LongPtr)
-    m_Value.Arr(0).dwExtraInfo = Value
+    m_Value.arr(0).dwExtraInfo = Value
 End Property
 
 Public Function ToStr() As String
     Dim s As String: s = TypeName(Me) & "{" & vbCrLf
     With Me
-        s = s & "    dX          : " & .dX & vbCrLf
-        s = s & "    dY          : " & .dY & vbCrLf
+        s = s & "    dX          : " & .dx & vbCrLf
+        s = s & "    dY          : " & .dy & vbCrLf
         s = s & "    MouseData   : " & .MouseData & vbCrLf
         s = s & "    Flags       : " & MVirtualKeys.EMouseEventFlags_ToStr(.Flags) & vbCrLf
         's = s & "    Flags       : " & .Flags & vbCrLf
@@ -169,6 +174,14 @@ End Function
 
 Public Sub Edit()
     MApp.EditInputMouse Me
+End Sub
+
+Public Sub Send()
+    'only for sending this one mouse action
+    'when combined with other mouse- or keybd-actions this object is inside WndInputs and will be sent together with the other ones with the function SendInput
+    With Me
+        mouse_event .Flags, .dx, .dy, .MouseData, .ExtraInfo
+    End With
 End Sub
 
 'Remarks
@@ -189,3 +202,10 @@ End Sub
 'If the specified distance along either the x or y axis is greater than the second mouse threshold value, and the mouse speed is equal to two, the system doubles the distance
 'that resulted from applying the first threshold test.
 'It is thus possible for the system to multiply specified relative mouse movement along the x or y axis by up to four times.
+
+
+' v ' ############################## ' v '    Implements IWndInputSender    ' v ' ############################## ' v '
+Private Sub IWndInputSender_Send()
+    Me.Send
+End Sub
+

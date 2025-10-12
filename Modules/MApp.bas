@@ -3,7 +3,8 @@ Option Explicit
 Public Declare Function GetDesktopWindow Lib "user32" () As LongPtr
 
 Sub Main()
-    FKeyboard.Show
+    'FKeyboard.Show
+    FMain.Show
 End Sub
 
 Public Function FileExists(ByVal FileName As String) As Boolean

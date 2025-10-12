@@ -25,6 +25,12 @@ Private Type WRect
     Bottom As Long
 End Type
 
+'https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getactivewindow
+Private Declare Function GetActiveWindow Lib "user32" () As LongPtr
+
+'https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setactivewindow
+Private Declare Function SetActiveWindow Lib "user32" (ByVal hwnd As Long) As Long
+
 'https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdesktopwindow
 Private Declare Function GetDesktopWindow Lib "user32" () As LongPtr
 

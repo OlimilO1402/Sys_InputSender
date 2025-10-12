@@ -9,12 +9,12 @@ Public Function WndInputs(ByVal hWndSender As LongPtr, ByVal hWndReceiver As Lon
     Set WndInputs = New WndInputs: WndInputs.New_ hWndSender, hWndReceiver, Name
 End Function
 
-Public Function WndInputMouse(ByVal dX As Long, ByVal dY As Long, ByVal MouseData As Long, ByVal Flags As Long, ByVal aTime As Long) As WndInputMouse
-    Set WndInputMouse = New WndInputMouse: WndInputMouse.New_ dX, dY, MouseData, Flags, aTime
+Public Function WndInputMouse(ByVal dX As Long, ByVal dY As Long, ByVal MouseData As Long, ByVal Flags As Long) As WndInputMouse ', ByVal aTime As Long
+    Set WndInputMouse = New WndInputMouse: WndInputMouse.New_ dX, dY, MouseData, Flags ', aTime
 End Function
 
-Public Function WndInputKeybd(ByVal VirtKey As EVirtualKeyCodes, ByVal Scan As Integer, ByVal Flags As EKeyEventFlags, ByVal aTime As Long) As WndInputKeybd
-    Set WndInputKeybd = New WndInputKeybd: WndInputKeybd.New_ CInt(VirtKey), Scan, Flags, aTime
+Public Function WndInputKeybd(ByVal VirtKey As EVirtualKeyCodes, ByVal Scan As Integer, ByVal Flags As EKeyEventFlags) As WndInputKeybd ', ByVal aTime As Long
+    Set WndInputKeybd = New WndInputKeybd: WndInputKeybd.New_ CInt(VirtKey), Scan, Flags ', aTime
 End Function
 
 Public Function WndInputHardw(ByVal aMessage As Long, ByVal WParamL As Integer, ByVal WParamH As Integer) As WndInputHardw
@@ -24,3 +24,8 @@ End Function
 Public Function WndInputDelay(ByVal Milliseconds As Long) As WndInputDelay
     Set WndInputDelay = New WndInputDelay: WndInputDelay.New_ Milliseconds
 End Function
+
+Public Function WndInputText(ByVal Name As String, ByVal Text As String, ByVal hWndSender As LongPtr, ByVal hWndReceiver As LongPtr) As WndInputText
+    Set WndInputText = New WndInputText: WndInputText.New_ Name, Text, hWndSender, hWndReceiver
+End Function
+

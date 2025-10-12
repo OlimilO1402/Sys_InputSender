@@ -12,6 +12,7 @@ Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
+Implements IWndInputSender
 
 'https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-keybdinput
 Private Type KEYBDINPUT
@@ -26,8 +27,14 @@ End Type                     ' Sum: 20
 
 Private Type PKEYBDINPUT
     SAPtr As TUDTPtr
-    Arr() As KEYBDINPUT
+    arr() As KEYBDINPUT
 End Type
+
+'https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-keybd_event
+Declare Sub keybd_event Lib "user32" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Long, ByVal dwExtraInfo As LongPtr)
+
+'https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-oemkeyscan
+Declare Function OemKeyScan Lib "user32" (ByVal wOemChar As Long) As Long
 
 Private m_Value As PKEYBDINPUT
 Private m_Data  As KEYBDINPUT
@@ -35,12 +42,12 @@ Private m_Data  As KEYBDINPUT
 Private Sub Class_Initialize()
     m_Data.dwType = EInputType.INPUT_KEYBOARD
     MPtr.New_UDTPtr m_Value.SAPtr, FADF_AUTO Or FADF_FIXEDSIZE Or FADF_RECORD, 24
-    MPtr.SAPtr(ArrPtr(m_Value.Arr)) = m_Value.SAPtr.pSA
+    MPtr.SAPtr(ArrPtr(m_Value.arr)) = m_Value.SAPtr.pSA
     m_Value.SAPtr.pvData = VarPtr(m_Data)
 End Sub
 
 Private Sub Class_Terminate()
-    MPtr.ZeroSAPtr ArrPtr(m_Value.Arr)
+    MPtr.ZeroSAPtr ArrPtr(m_Value.arr)
 End Sub
 Friend Sub New_(VirtKey As Integer, Scan As Integer, Flags As EKeyEventFlags, aTime As Long)
     With Me: .VirtKeyCode = VirtKey: .Scan = Scan: .Flags = Flags: .Time = aTime: End With
@@ -69,23 +76,23 @@ Public Property Let Ptr(ByVal Value As LongPtr)
 End Property
 
 Public Sub SetData()
-    m_Value.Arr(0) = m_Data
+    m_Value.arr(0) = m_Data
 End Sub
 
 'A virtual-key code. The code must be a value in the range 1 to 254. If the dwFlags member specifies KEYEVENTF_UNICODE, wVk must be 0.
 Public Property Get VirtKeyCode() As Integer
-    VirtKeyCode = m_Value.Arr(0).wVk
+    VirtKeyCode = m_Value.arr(0).wVk
 End Property
 Public Property Let VirtKeyCode(ByVal Value As Integer)
-    m_Value.Arr(0).wVk = Value
+    m_Value.arr(0).wVk = Value
 End Property
 
 'A hardware scan code for the key. If dwFlags specifies KEYEVENTF_UNICODE, wScan specifies a Unicode character which is to be sent to the foreground application.
 Public Property Get Scan() As Integer
-    Scan = m_Value.Arr(0).wScan
+    Scan = m_Value.arr(0).wScan
 End Property
 Public Property Let Scan(ByVal Value As Integer)
-    m_Value.Arr(0).wScan = Value
+    m_Value.arr(0).wScan = Value
 End Property
 
 'Specifies various aspects of a keystroke. This member can be certain combinations of the following values:
@@ -95,26 +102,26 @@ End Property
 'KEYEVENTF_UNICODE     = &H0004  |   If specified, the system synthesizes a VK_PACKET keystroke. The wVk parameter must be zero. This flag can only be combined with the KEYEVENTF_KEYUP flag. For more information, see the Remarks section.
 'KEYEVENTF_SCANCODE    = &H0008  |   If specified, wScan identifies the key and wVk is ignored.
 Public Property Get Flags() As EKeyEventFlags
-    Flags = m_Value.Arr(0).dwFlags
+    Flags = m_Value.arr(0).dwFlags
 End Property
 Public Property Let Flags(ByVal Value As EKeyEventFlags)
-    m_Value.Arr(0).dwFlags = Value
+    m_Value.arr(0).dwFlags = Value
 End Property
 
 'The time stamp for the event, in milliseconds. If this parameter is zero, the system will provide its own time stamp.
 Public Property Get Time() As Long
-    Time = m_Value.Arr(0).Time
+    Time = m_Value.arr(0).Time
 End Property
 Public Property Let Time(ByVal Value As Long)
-    m_Value.Arr(0).Time = Value
+    m_Value.arr(0).Time = Value
 End Property
 
 'An additional value associated with the keystroke. Use the GetMessageExtraInfo function to obtain this information.
 Public Property Get ExtraInfo() As LongPtr
-    ExtraInfo = m_Value.Arr(0).dwExtraInfo
+    ExtraInfo = m_Value.arr(0).dwExtraInfo
 End Property
 Public Property Let ExtraInfo(ByVal Value As LongPtr)
-    m_Value.Arr(0).dwExtraInfo = Value
+    m_Value.arr(0).dwExtraInfo = Value
 End Property
 
 Public Function ToStr() As String
@@ -131,6 +138,12 @@ End Function
 
 Public Sub Edit()
     MApp.EditInputKeybd Me
+End Sub
+
+Public Sub Send()
+    With Me
+        keybd_event .VirtKeyCode, .Scan, .Flags, .ExtraInfo
+    End With
 End Sub
 
 'Remarks
